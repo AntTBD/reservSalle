@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/*$(document).ready(function () {
 
     $("#connexionModalBtn").click( function() {      //affiche une modal
       loadModal();
@@ -38,4 +38,4 @@ function loadModal() {
         });
     });
 
-}
+}*/
