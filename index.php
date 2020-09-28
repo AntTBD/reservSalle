@@ -11,7 +11,7 @@ include 'header.php';
     </a>
     <a>
         <!-- Button trigger modal -->
-        <button type="button" id="connexionBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+        <button type="button" id="connexionModalBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal">
             connexion
         </button>
     </a>

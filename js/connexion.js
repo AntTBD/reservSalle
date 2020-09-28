@@ -1,9 +1,12 @@
 $(document).ready(function () {
 
-    $("#connexionBtn").click( function() {      //affiche une modal
+    $("#connexionModalBtn").click( function() {      //affiche une modal
       loadModal();
 
     });
+    $("#connexionBtn").click(function () {
+        window.location.href = "http://reservsalle/main.php";
+    })
 
 });
 
@@ -34,7 +37,5 @@ function loadModal() {
             }
         });
     });
-    $("#connexionBtn").click(function () {
-        window.location.href = "http://reservsalle/";
-    })
+
 }
