@@ -1,22 +1,9 @@
 <?php
-include 'header.php';
+include 'commun/header.php';
+include 'commun/navbar.php';
 ?>
 
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">
-        ReservSalle
-    </a>
-    <a class="navbar-brand" href="#">
-        Bitedetoro
-    </a>
-    <a>
-        <!-- Button trigger modal -->
-        <button type="button" id="connexionModalBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal">
-            connexion
-        </button>
-    </a>
 
-</nav>
 
 
 <h1 style="text-align: center; font-style: italic; color: #ea9800; font-size: 120px">Bienvenue sur</h1>
@@ -59,6 +46,6 @@ include 'header.php';
 </div>
 
 <?php
-include 'footer.php';
+include 'scripts.php';
 ?>
 
