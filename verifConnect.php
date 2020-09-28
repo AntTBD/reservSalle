@@ -11,7 +11,8 @@ $result = $db->query('SELECT * FROM user');
 
 while ($row = $result->fetch(PDO::FETCH_ASSOC)):
     if($row['email'] == $_POST['emailForm']){
-        ?>
+        if($row['mdp'] == $_POST['mdp']){
+            ?>
         <form id="myForm" action="main.php" method="post">
             <?php
             foreach ($_POST as $a => $b) {
@@ -22,8 +23,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)):
         <script type="text/javascript">
             document.getElementById('myForm').submit();
         </script>
-
-        <?php
+            <?php
+        }else{
+            //A FAIRE : message d'erreur sur le mot de passe !
+        }
     }else{
         $verif = 1;
     }
