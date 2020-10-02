@@ -3,7 +3,7 @@
         ReservSalle
     </a>
     <a class="navbar-brand" href="#">
-        Bitedetoro
+        Test
     </a>
     <a>
         <!-- Button trigger modal -->
