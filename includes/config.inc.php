@@ -1,7 +1,7 @@
 <?php
 $database = [
 	'host' => 'localhost',
-	'base' => 'reserveSalle',
+	'base' => 'reservSalle',
 	'user' => 'root',
 	'password' => ''
 	];
