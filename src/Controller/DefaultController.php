@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Model\Repository\Repository;
 use App\Model\Repository\UserRepository;
 
-class DefaultController
+class  DefaultController
 {
     public static function index()
     {
@@ -35,32 +35,18 @@ class DefaultController
                 if ($userRepository->login($_POST['emailForm'], $_POST['mdp'])) {
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
-                    ?>
-                    <form id="myForm" action="/index.php/reservation" method="POST">
-                        <?php
-                        foreach ($_POST as $a => $b) {
-                            echo '<input type="hidden" name="' . htmlentities($a) . '" value="' . htmlentities($b) . '">';
-                        }
-                        ?>
-                    </form>
-                    <script type="text/javascript">
-                        document.getElementById('myForm').submit();
-                    </script>
-                    <?php
+
+                    header("Location: /index.php/reservation");
+                    exit();
 
                 } else {
                     //envoi d'un message
                     DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
 
+                    $_SESSION["state"] = "errorMdp";
+                    header("Location: /");
+                    exit();
 
-                    ?>
-                    <form id="myForm" action="/" method="post">
-                        <input type="hidden" name="error" value="error">
-                    </form>
-                    <script type="text/javascript">
-                        document.getElementById('myForm').submit();
-                    </script>
-                    <?php
                 }
             }
         }
@@ -68,7 +54,7 @@ class DefaultController
 //A FAIRE : message d'erreur sur le mot de passe !
 // ant: utilise le controller avec la fonction alertMessage($typeAlert, $messageAlert)
 
-        require __DIR__ . '/../View/Accueil/accueil.php';
+
     }
 
     public static function reservation()

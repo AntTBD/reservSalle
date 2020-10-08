@@ -48,8 +48,8 @@ class UserRepository
     public function login($email, $mdp)
     {
         if ($result = $this->findByEmail($email)) {
-            if (password_verify($mdp, $result['mdp'])) {
-            //if ($mdp==$result['mdp']) {
+            //if (password_verify($mdp, $result['mdp'])) {
+            if ($mdp==$result['mdp']) {
                 $user = $this->find($result['id']);
                 $_SESSION['id'] = $user->getId();
                 $_SESSION['email'] =  $user->getEmail();

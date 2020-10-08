@@ -1,4 +1,4 @@
-<?php if(isset($_POST["error"])){echo "<div class='alert alert-danger' role='alert'>Connexion impossible, veuillez réessayer</div>";} ?>
+<?php if(isset($_SESSION["state"])){if($_SESSION["state"] == "errorMdp"){echo "<div class='alert alert-danger' role='alert'>Connexion impossible, veuillez réessayer</div>";}} ?>
 
     <h1 style="text-align: center; font-style: italic; color: #ea9800; font-size: 120px">Bienvenue sur</h1>
     <h1 style="text-align: center; font-family: Impact, fantasy; color: #28a2db; font-weight: 900; font-size: 150px;">reservSalle 3iL</h1>
