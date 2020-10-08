@@ -26,19 +26,15 @@ class DispoRepository
 
     }
 
-
-
-    /*public function findAllForMe(int $id)
+    public function findAll()
     {
-        $response = $this->base->prepare('SELECT * FROM characters_log WHERE character_id = :id');
-        $response->bindValue(':id', $id);
-        $result = $response->execute();
-        if ($result === true) {
-            $records = $response->fetchAll(PDO::FETCH_CLASS, 'CharacterLog');
-            return $records;
+        $reponse = $this->base->prepare('SELECT * FROM creneau;');
+        $resultats = $reponse->execute();
+        if($resultats==true){
+            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
+            return $listSalle;
         }
-
         return false;
-    }*/
+    }
 
 }

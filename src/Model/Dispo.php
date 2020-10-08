@@ -38,7 +38,7 @@ class Dispo
     // salle
     public function getIdSalle()
     {
-        return $this->idSalle;
+        return $this->salle;
     }
 
     public function setIdSalle($idSalle)

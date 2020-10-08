@@ -1,5 +1,9 @@
 <p>Aujourd'hui nous sommes le <?php echo date('d/m/Y h:i:s'); ?>.</p>
 
+<?php //var_dump($salles); ?>
+<?php //var_dump($creneaux); ?>
+<?php //var_dump($dispos); ?>
+
 
 <div style="overflow:scroll;height:610px;width:1000px;">
     <table class="table table-bordered">
@@ -7,79 +11,36 @@
         <div id =test >
             <tr>
                 <th scope="col">Creneaux</th>
-                <th scope="col">Salle 107</th>
-                <th scope="col">Salle 108</th>
-                <th scope="col">Salle 109 </th>
-                <th scope="col">Salle 110</th>
-                <th scope="col">Salle 111 </th>
-                <th scope="col">Salle 112</th>
+                <?php foreach ($salles as $salle){
+                    echo "<th scope='col'>".$salle->getNumSalle()."</th>";
+                } ?>
             </tr>
         </div>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">8h30-10h00</th>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
-        <tr>
-            <th scope="row" >10h30-12h00</th>
-            <td>Jacob    <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>Thornton <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@fat     <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>Jacob    <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>Thornton <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@fat     <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-        </tr>
-        <tr>
-            <th scope="row">12h00-13h30</th>
-            <td>Larry     <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>the Bird  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@twitter  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
-        <tr>
-            <th scope="row">13h30-15h00</th>
-            <td>Larry   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>the Bird  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@twitter <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
-        <tr>
-            <th scope="row">15h15-16h45</th>
-            <td>Larry  <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>the Bird  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@twitter  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
-        <tr>
-            <th scope="row">17h00-18h30</th>
-            <td>Larry  <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>the Bird  <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@twitter  <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
-        <tr>
-            <th scope="row" >10h30-12h00</th>
-            <td>Jacob    <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>Thornton <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>@fat     <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button></td>
-            <td>indisponible <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-            <td>disponible   <button type="button" class="btn btn-outline-secondary">Réserver</button> </td>
-        </tr>
+
+            <?php foreach ($creneaux as $creneau){
+                echo "<tr><th scope='row'>".$creneau->getHeureDebut()."</th>";
+
+                    foreach ($salles as $salle){
+                        foreach ($dispos as $dispo){
+                            $salleNb = $salle->getNbPlaces();
+                            if($dispo->getIdSalle() == $salle->getId() && $dispo->getIdCreneau() == $creneau->getId()){
+                                $salleNb--;
+                            }
+                        }
+                        // /!\ EN TRAVEAUX /!\
+                        if($salleNb > 0){
+                            echo "<td>disponible   <button type='button' class='btn btn-outline-secondary'>Réserver</button></td>";
+                        }else{
+                            echo "<td>indisponible   <button type='button' class='btn btn-outline-secondary' disabled>Réserver</button></td>";
+                        }
+                        // /!\ EN TRAVEAUX /!\
+                    }
+
+                echo "</tr>";
+            }?>
+
         </tbody>
     </table>
 

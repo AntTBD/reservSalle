@@ -4,9 +4,12 @@
 namespace App\Controller;
 
 
+use App\Model\Repository\CreneauRepository;
 use App\Model\Repository\Repository;
 use App\Model\Repository\ReservationRepository;
+use App\Model\Repository\SalleRepository;
 use App\Model\Repository\UserRepository;
+use App\model\Repository\DispoRepository;
 
 class DefaultController
 {
@@ -77,6 +80,15 @@ class DefaultController
         $base = Repository::connect();
         $reservationRepository = new ReservationRepository($base);
         $reservationRepository->countsalle();
+        //affichage de salles
+        $salleRepository = new SalleRepository($base);
+        $salles = $salleRepository->findAll();
+        //affichages creneaux
+        $creneauRepository = new CreneauRepository($base);
+        $creneaux = $creneauRepository->findAll();
+        $dispoRepository = new DispoRepository($base);
+        $dispos = $dispoRepository->findAll();
+
         require __DIR__ . '/../View/Reservations/main.php';
     }
 
