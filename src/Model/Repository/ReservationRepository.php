@@ -26,4 +26,10 @@ class ReservationRepository
         $user->hydrate(['id' => $this->base->lastInsertId()]);*/
     }
 
+    public function countsalle()
+    {
+        $reponse = $this->base->prepare('SELECT  COUNT(id)  FROM salle;  ');
+        $resultats = $reponse->execute();
+        return $resultats[0];
+    }
 }
