@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Model\Repository\Repository;
+use App\Model\Repository\ReservationRepository;
 use App\Model\Repository\UserRepository;
 
 class  DefaultController
@@ -59,7 +60,9 @@ class  DefaultController
 
     public static function reservation()
     {
-        //self::connectToBase();
+        $base = Repository::connect();
+        $reservationRepository = new ReservationRepository($base);
+        $reservationRepository->countsalle();
         require __DIR__ . '/../View/Reservations/main.php';
     }
 
