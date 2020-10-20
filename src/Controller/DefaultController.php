@@ -19,11 +19,15 @@ class  DefaultController
 
     public static function accueil()
     {
+        $tabCorrespondance=Array('Y','Z','A','B','C','D','E','F','G','H');// tableau des variables possibles
+        shuffle($tabCorrespondance);// on melange le tableau
+        $_SESSION["tab"] = $tabCorrespondance;// on le sauvegarde en session
         require __DIR__ . '/../View/Accueil/accueil.php';
+
     }
 
     public static function verifConnect(){
-
+        echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdp'].'<br>';
         if (isset($_SESSION['id'])) {
             //envoi d'un message
             DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
@@ -33,7 +37,17 @@ class  DefaultController
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
 
-                if ($userRepository->login($_POST['emailForm'], $_POST['mdp'])) {
+                $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
+                unset($_SESSION['tab']);// on supprime le tableau
+                $motdepasse = $_POST["mdp"];// on recupère le mdp en lettre
+                $mdpReel = "";
+                for ($i=0; $i<strlen($motdepasse); $i++){
+                    $mdpReel.= self::convert($motdepasse[$i], $tableau);// on converti chaque lettre en chiffre
+                }
+                //echo 'mdpReel '.$mdpReel.'<br>';
+
+
+                if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
 
@@ -56,6 +70,23 @@ class  DefaultController
 // ant: utilise le controller avec la fonction alertMessage($typeAlert, $messageAlert)
 
 
+    }
+    private static function convert ( $lettre, $tabCorrespondance ) {
+        // on recupère les correspondances
+        $tab = array(
+            $tabCorrespondance[0] => "0",
+            $tabCorrespondance[1] => "1",
+            $tabCorrespondance[2] => "2",
+            $tabCorrespondance[3] => "3",
+            $tabCorrespondance[4] => "4",
+            $tabCorrespondance[5] => "5",
+            $tabCorrespondance[6] => "6",
+            $tabCorrespondance[7] => "7",
+            $tabCorrespondance[8] => "8",
+            $tabCorrespondance[9] => "9"
+        );
+        $lettre = strtr("$lettre", $tab);//on remplace les carractères grace aux pairs de la table
+        return $lettre;
     }
 
     public static function reservation()
