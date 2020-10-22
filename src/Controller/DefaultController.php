@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Model\ClavierCrypte;
 use App\Model\Repository\Repository;
 use App\Model\Repository\ReservationRepository;
 use App\Model\Repository\UserRepository;
@@ -19,9 +20,9 @@ class  DefaultController
 
     public static function accueil()
     {
-        $tabCorrespondance=Array('Y','Z','A','B','C','D','E','F','G','H');// tableau des variables possibles
-        shuffle($tabCorrespondance);// on melange le tableau
-        $_SESSION["tab"] = $tabCorrespondance;// on le sauvegarde en session
+        $clavierCrypte = new ClavierCrypte();
+        $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
+
         require __DIR__ . '/../View/Accueil/accueil.php';
 
     }
@@ -37,30 +38,63 @@ class  DefaultController
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
 
-                $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
-                unset($_SESSION['tab']);// on supprime le tableau
-                $motdepasse = $_POST["mdp"];// on recupère le mdp en lettre
-                $mdpReel = "";
-                for ($i=0; $i<strlen($motdepasse); $i++){
-                    $mdpReel.= self::convert($motdepasse[$i], $tableau);// on converti chaque lettre en chiffre
-                }
-                //echo 'mdpReel '.$mdpReel.'<br>';
-
+                $clavierCrypte = new ClavierCrypte();
+                $mdpReel=$clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdp"]);
 
                 if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-                    header("Location: /index.php/reservation");
-                    exit();
+//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+//                    <script>
+//                        var compt = document.getElementById('compt'),
+//                            s = document.getElementById('s'),
+//                            durRest = 5;
+//
+//                        function refreshTimer(){
+//                            compt.innerHTML = durRest;
+//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+//
+//                            if (durRest <= 0)
+//                                window.location.href = '/index.php/reservation';
+//                            else {
+//                                durRest--;
+//                                setTimeout(refreshTimer, 1000);
+//                            }
+//                        }
+//                        refreshTimer();
+//                    </script>";
+
+                    //header("Location: /index.php/reservation");
+                    //exit();
 
                 } else {
                     //envoi d'un message
                     DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
 
                     $_SESSION["state"] = "errorMdp";
-                    header("Location: /");
-                    exit();
+//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+//                    <script>
+//                        var compt = document.getElementById('compt'),
+//                            s = document.getElementById('s'),
+//                            durRest = 5;
+//
+//                        function refreshTimer(){
+//                            compt.innerHTML = durRest;
+//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+//
+//                            if (durRest <= 0)
+//                                window.location.href = '/';
+//                            else {
+//                                durRest--;
+//                                setTimeout(refreshTimer, 1000);
+//                            }
+//                        }
+//                        refreshTimer();
+//                    </script>";
+
+                    //header("Location: /");
+                    //exit();
 
                 }
             }
@@ -70,23 +104,6 @@ class  DefaultController
 // ant: utilise le controller avec la fonction alertMessage($typeAlert, $messageAlert)
 
 
-    }
-    private static function convert ( $lettre, $tabCorrespondance ) {
-        // on recupère les correspondances
-        $tab = array(
-            $tabCorrespondance[0] => "0",
-            $tabCorrespondance[1] => "1",
-            $tabCorrespondance[2] => "2",
-            $tabCorrespondance[3] => "3",
-            $tabCorrespondance[4] => "4",
-            $tabCorrespondance[5] => "5",
-            $tabCorrespondance[6] => "6",
-            $tabCorrespondance[7] => "7",
-            $tabCorrespondance[8] => "8",
-            $tabCorrespondance[9] => "9"
-        );
-        $lettre = strtr("$lettre", $tab);//on remplace les carractères grace aux pairs de la table
-        return $lettre;
     }
 
     public static function reservation()

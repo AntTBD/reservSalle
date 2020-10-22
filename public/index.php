@@ -5,6 +5,10 @@
 
 session_start();
 
+
+//phpinfo();
+
+
 require __DIR__ . '/../src/View/Commons/header.php';
 
 use App\Controller\DefaultController;
