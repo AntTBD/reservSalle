@@ -47,25 +47,25 @@ class  DefaultController
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
-//                    <script>
-//                        var compt = document.getElementById('compt'),
-//                            s = document.getElementById('s'),
-//                            durRest = 5;
-//
-//                        function refreshTimer(){
-//                            compt.innerHTML = durRest;
-//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
-//
-//                            if (durRest <= 0)
-//                                window.location.href = '/index.php/reservation';
-//                            else {
-//                                durRest--;
-//                                setTimeout(refreshTimer, 1000);
-//                            }
-//                        }
-//                        refreshTimer();
-//                    </script>";
+                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+                    <script>
+                        var compt = document.getElementById('compt'),
+                            s = document.getElementById('s'),
+                            durRest = 5;
+
+                        function refreshTimer(){
+                            compt.innerHTML = durRest;
+                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+
+                            if (durRest <= 0)
+                                window.location.href = '/index.php/reservation';
+                            else {
+                                durRest--;
+                                setTimeout(refreshTimer, 1000);
+                            }
+                        }
+                        refreshTimer();
+                    </script>";
 
                     //header("Location: /index.php/reservation");
                     //exit();
@@ -75,25 +75,25 @@ class  DefaultController
                     DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
 
                     $_SESSION["state"] = "errorMdp";
-//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
-//                    <script>
-//                        var compt = document.getElementById('compt'),
-//                            s = document.getElementById('s'),
-//                            durRest = 5;
-//
-//                        function refreshTimer(){
-//                            compt.innerHTML = durRest;
-//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
-//
-//                            if (durRest <= 0)
-//                                window.location.href = '/';
-//                            else {
-//                                durRest--;
-//                                setTimeout(refreshTimer, 1000);
-//                            }
-//                        }
-//                        refreshTimer();
-//                    </script>";
+                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+                    <script>
+                        var compt = document.getElementById('compt'),
+                            s = document.getElementById('s'),
+                            durRest = 5;
+
+                        function refreshTimer(){
+                            compt.innerHTML = durRest;
+                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+
+                            if (durRest <= 0)
+                                window.location.href = '/';
+                            else {
+                                durRest--;
+                                setTimeout(refreshTimer, 1000);
+                            }
+                        }
+                        refreshTimer();
+                    </script>";
 
                     //header("Location: /");
                     //exit();

@@ -86,7 +86,7 @@ class ClavierCrypte
             $mdpReel.= self::convert($combinaisonLettre, $tabCorrespondanceInverse);// on converti chaque lettre en chiffre
             $i+=$this->nbrCharByNum-1;
         }
-        echo 'mdpReel '.$mdpReel.'<br>';
+        //echo 'mdpReel '.$mdpReel.'<br>';
         return $mdpReel;
     }
 
