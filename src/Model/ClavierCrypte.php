@@ -58,9 +58,7 @@ class ClavierCrypte
         return $random_string;
     }
 
-    public function mdpConvertedFromTabCorrespondance($mdpCodeFromPost){
-        $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
-        //unset($_SESSION['tab']);// on supprime le tableau
+    public function mdpConvertedFromTabCorrespondance($mdpCodeFromPost, $tableau){
 
         // on recupère les correspondances
         $tabCorrespondanceInverse = array(

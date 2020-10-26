@@ -16,21 +16,29 @@ class  DefaultController
     public static function index()
     {
         $emplacement = $_SERVER["DOCUMENT_ROOT"];
-        require __DIR__ . '/../View/base.php';
+        //envoi d'un message
+        DefaultController::alertMessage("success", "<h3>It works</h3>Dossier www : ".$emplacement);
     }
 
 
     public static function accueil()
     {
-        $clavierCrypte = new ClavierCrypte();
-        $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
+        if (!isset($_SESSION['id'])) {
+            $clavierCrypte = new ClavierCrypte();
+            $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
+
+            require_once __DIR__ . "/../View/Connexion/connexion.php";
+        }
 
         require __DIR__ . '/../View/Accueil/accueil.php';
 
     }
 
-    public static function verifConnect(){
-        echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdp'].'<br>';
+    public static function connexion(){
+        if (isset($_POST['emailForm']) && isset($_POST['mdp'])) {
+            echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdp'].'<br>';
+        }
+
         if (isset($_SESSION['id'])) {
             //envoi d'un message
             DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
@@ -40,71 +48,35 @@ class  DefaultController
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
 
-                $clavierCrypte = new ClavierCrypte();
-                $mdpReel=$clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdp"]);
+                if(isset($_SESSION["tab"])) {
 
+                    $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
+                    unset($_SESSION['tab']);// on supprime le tableau dans la session
+
+                    $clavierCrypte = new ClavierCrypte();
+                    $mdpReel = $clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdp"], $tableau);
+                }else{
+                    $mdpReel = null;
+                }
                 if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
+
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
-                    <script>
-                        var compt = document.getElementById('compt'),
-                            s = document.getElementById('s'),
-                            durRest = 5;
+                    //envoi de la redirection auto
+                    self::redirectionAuto( "/index.php/reservation", "RESERVATIONS", 5);
 
-                        function refreshTimer(){
-                            compt.innerHTML = durRest;
-                            s.innerHTML = (durRest > 1) ? \"s\" : null;
-
-                            if (durRest <= 0)
-                                window.location.href = '/index.php/reservation';
-                            else {
-                                durRest--;
-                                setTimeout(refreshTimer, 1000);
-                            }
-                        }
-                        refreshTimer();
-                    </script>";
-
-                    //header("Location: /index.php/reservation");
-                    //exit();
 
                 } else {
                     //envoi d'un message
-                    DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
+                    DefaultController::alertMessage("danger", "Ce compte n'existe pas !<br>Veuillez réessayer.");
 
-                    $_SESSION["state"] = "errorMdp";
-                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
-                    <script>
-                        var compt = document.getElementById('compt'),
-                            s = document.getElementById('s'),
-                            durRest = 5;
-
-                        function refreshTimer(){
-                            compt.innerHTML = durRest;
-                            s.innerHTML = (durRest > 1) ? \"s\" : null;
-
-                            if (durRest <= 0)
-                                window.location.href = '/';
-                            else {
-                                durRest--;
-                                setTimeout(refreshTimer, 1000);
-                            }
-                        }
-                        refreshTimer();
-                    </script>";
-
-                    //header("Location: /");
-                    //exit();
+                    //envoi de la redirection auto
+                    self::redirectionAuto( "/", "ACCUEIL", 5);
 
                 }
             }
         }
-
-//A FAIRE : message d'erreur sur le mot de passe !
-// ant: utilise le controller avec la fonction alertMessage($typeAlert, $messageAlert)
-
 
     }
 
@@ -130,31 +102,11 @@ class  DefaultController
     public static function deconnexion() {
         session_destroy();
         $_SESSION = null;
-        require __DIR__ . '/../View/Connexion/deconnexion.php';
-    }
 
-    public static function connexion(){
-        $base = Repository::connect();
-        if (isset($_SESSION['id'])) {
-            //envoi d'un message
-            self::alertMessage("warning", "Vous êtes déjà connecté");
-        } else {
-            if (isset($_POST['email']) && isset($_POST['password'])) {
-
-                $userRepository = new UserRepository($base);
-
-                if ($userRepository->login($_POST['email'], $_POST['mdp'])) {
-                    //envoi d'un message
-                    self::alertMessage("success", "Vous êtes connecté.");
-                    //appel le fichier index.php
-                    //header('Location: /');
-                } else {
-                    //envoi d'un message
-                    self::alertMessage("danger", "Ce compte n'existe pas !");
-                }
-            }
-            //require __DIR__ . '/../View/Connexion/connexion.php';
-        }
+        //envoi d'un message
+        self::alertMessage("success", "Vous avez bien été déconnecté !");
+        //envoi de la redirection auto
+        self::redirectionAuto("/", "ACCUEIL", 5);
     }
 
     public static function erreur404()

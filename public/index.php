@@ -5,10 +5,6 @@
 
 session_start();
 
-
-//phpinfo();
-
-
 require __DIR__ . '/../src/View/Commons/header.php';
 
 use App\Controller\DefaultController;
@@ -35,3 +31,6 @@ require __DIR__ . '/../src/View/Commons/footer.php';
 
 //on affiche le contenu de ce tampon
 //ob_end_flush();
+
+//var_dump($_SESSION);
+//phpinfo();
