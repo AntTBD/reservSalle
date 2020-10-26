@@ -124,4 +124,19 @@ class  DefaultController
         require __DIR__ . '/../View/alertMessage.php';
     }
 
+    public static function redirectionAuto($lien, $nomPage, $dureeEnSecondeAvantRedirection)
+    {
+        require __DIR__ . '/../View/redirection_auto.php';
+    }
+
+    public static function generatePassword()
+    {
+        require __DIR__ . '/../View/generatePassword.php';
+        if(isset($_POST["mdp"])){
+            //envoi d'un message
+            self::alertMessage("success", "Password hashed:<br><small>".password_hash($_POST["mdp"], PASSWORD_ARGON2I)."</small>");
+        }
+
+    }
+
 }
