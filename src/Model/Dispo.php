@@ -24,6 +24,14 @@ class Dispo
         $this->date = $date;
     }
 
+    public function load($date,$idSalle,$idCreneau){
+        $dispo = new self();
+        $dispo->setId($date);
+        $dispo->setIdCreneau($idCreneau);
+        $dispo->setIdSalle($idSalle);
+        return $dispo;
+    }
+
     // creneau
     public function getIdCreneau()
     {
@@ -38,7 +46,7 @@ class Dispo
     // salle
     public function getIdSalle()
     {
-        return $this->idSalle;
+        return $this->salle;
     }
 
     public function setIdSalle($idSalle)

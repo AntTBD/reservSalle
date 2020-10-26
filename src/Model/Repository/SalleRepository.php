@@ -24,4 +24,14 @@ class SalleRepository
         $user->hydrate(['id' => $this->base->lastInsertId()]);*/
     }
 
+    public function findAll()
+    {
+        $reponse = $this->base->prepare('SELECT * FROM salle;');
+        $resultats = $reponse->execute();
+        if($resultats==true){
+            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Salle');
+            return $listSalle;
+        }
+        return false;
+    }
 }

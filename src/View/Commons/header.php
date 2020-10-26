@@ -18,6 +18,8 @@ require __DIR__.'/../../../vendor/autoload.php';
 
     <link href="/css/toastr.css">
 
+    <link href="/css/datepicker.css">
+
     <!-- style perso css -->
     <link rel="stylesheet" href="/css/style.css">
 

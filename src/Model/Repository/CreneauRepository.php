@@ -36,5 +36,16 @@ class CreneauRepository
         return (bool) $response->fetchColumn();
     }
 
+    public function findAll()
+    {
+        $reponse = $this->base->prepare('SELECT * FROM creneau;');
+        $resultats = $reponse->execute();
+        if($resultats==true){
+            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Creneau');
+            return $listSalle;
+        }
+        return false;
+    }
+
 
 }

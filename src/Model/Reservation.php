@@ -94,4 +94,6 @@ class Reservation
     {
         return substr(strrchr(__CLASS__, "\\"), 1);
     }
+
+
 }
