@@ -78,16 +78,18 @@ class DefaultController
     public static function reservation()
     {
         $base = Repository::connect();
-        $reservationRepository = new ReservationRepository($base);
-        $reservationRepository->countsalle();
         //affichage de salles
         $salleRepository = new SalleRepository($base);
         $salles = $salleRepository->findAll();
         //affichages creneaux
         $creneauRepository = new CreneauRepository($base);
         $creneaux = $creneauRepository->findAll();
+        //Les dispos
         $dispoRepository = new DispoRepository($base);
         $dispos = $dispoRepository->findAll();
+        //Les resas
+        $reservationRepository = new ReservationRepository($base);
+        $resas = $reservationRepository;
 
         require __DIR__ . '/../View/Reservations/main.php';
     }

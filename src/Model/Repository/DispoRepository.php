@@ -28,7 +28,7 @@ class DispoRepository
 
     public function findAll()
     {
-        $reponse = $this->base->prepare('SELECT * FROM creneau;');
+        $reponse = $this->base->prepare('SELECT * FROM dispo;');
         $resultats = $reponse->execute();
         if($resultats==true){
             $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
@@ -37,4 +37,16 @@ class DispoRepository
         return false;
     }
 
+    public function findBySalle($idSalle){
+        $reponse = $this->base->prepare('SELECT * FROM dispo WHERE idSalle = :salle;');
+        $reponse->bindValue(':salle',$idSalle);
+        $resultats = $reponse->execute();
+
+        if($resultats==true){
+            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
+            return $listSalle;
+        }
+
+        return false;
+    }
 }
