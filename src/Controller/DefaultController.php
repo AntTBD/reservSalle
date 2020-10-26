@@ -3,8 +3,8 @@
 
 namespace App\Controller;
 
-
 use App\Model\Repository\CreneauRepository;
+use App\Model\ClavierCrypte;
 use App\Model\Repository\Repository;
 use App\Model\Repository\ReservationRepository;
 use App\Model\Repository\SalleRepository;
@@ -22,11 +22,15 @@ class  DefaultController
 
     public static function accueil()
     {
+        $clavierCrypte = new ClavierCrypte();
+        $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
+
         require __DIR__ . '/../View/Accueil/accueil.php';
+
     }
 
     public static function verifConnect(){
-
+        echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdp'].'<br>';
         if (isset($_SESSION['id'])) {
             //envoi d'un message
             DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
@@ -36,20 +40,63 @@ class  DefaultController
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
 
-                if ($userRepository->login($_POST['emailForm'], $_POST['mdp'])) {
+                $clavierCrypte = new ClavierCrypte();
+                $mdpReel=$clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdp"]);
+
+                if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
                     //envoi d'un message
                     DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-                    header("Location: /index.php/reservation");
-                    exit();
+//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+//                    <script>
+//                        var compt = document.getElementById('compt'),
+//                            s = document.getElementById('s'),
+//                            durRest = 5;
+//
+//                        function refreshTimer(){
+//                            compt.innerHTML = durRest;
+//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+//
+//                            if (durRest <= 0)
+//                                window.location.href = '/index.php/reservation';
+//                            else {
+//                                durRest--;
+//                                setTimeout(refreshTimer, 1000);
+//                            }
+//                        }
+//                        refreshTimer();
+//                    </script>";
+
+                    //header("Location: /index.php/reservation");
+                    //exit();
 
                 } else {
                     //envoi d'un message
                     DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
 
                     $_SESSION["state"] = "errorMdp";
-                    header("Location: /");
-                    exit();
+//                    echo "<p>Redirection dans <span id=\"compt\"></span> seconde<span id=\"s\"></span>.
+//                    <script>
+//                        var compt = document.getElementById('compt'),
+//                            s = document.getElementById('s'),
+//                            durRest = 5;
+//
+//                        function refreshTimer(){
+//                            compt.innerHTML = durRest;
+//                            s.innerHTML = (durRest > 1) ? \"s\" : null;
+//
+//                            if (durRest <= 0)
+//                                window.location.href = '/';
+//                            else {
+//                                durRest--;
+//                                setTimeout(refreshTimer, 1000);
+//                            }
+//                        }
+//                        refreshTimer();
+//                    </script>";
+
+                    //header("Location: /");
+                    //exit();
 
                 }
             }
