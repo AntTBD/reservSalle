@@ -47,5 +47,18 @@ class CreneauRepository
         return false;
     }
 
+    public function findById($id)
+    {
+        $response = $this->base->prepare('SELECT * FROM creneau WHERE id = :id');
+        $response->bindValue(':id', $id);
+        $result = $response->execute();
+        if ($result === true) {
+            if ($creneau_temp = $response->fetch()) {
+                return new Creneau($creneau_temp);
+            }
+        }
+        return false;
+
+    }
 
 }

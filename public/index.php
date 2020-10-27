@@ -21,6 +21,8 @@ if ('/index.php' == $uri || '/' == $uri) {
     DefaultController::deconnexion();
 } elseif ('/index.php/reservation' == $uri) {
     DefaultController::reservation();
+} elseif ('/index.php/mesreservations' == $uri) {
+    DefaultController::mesReservations();
 } elseif ('/index.php/generatePassword' == $uri) {
     DefaultController::generatePassword();
 } else {

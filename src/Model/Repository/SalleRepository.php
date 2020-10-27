@@ -4,6 +4,8 @@
 namespace App\Model\Repository;
 
 
+use App\Model\Salle;
+
 class SalleRepository
 {
     private $base;
@@ -32,6 +34,20 @@ class SalleRepository
             $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Salle');
             return $listSalle;
         }
+        return false;
+    }
+
+    public function findById($id) {
+        $response = $this->base->prepare('SELECT * FROM salle WHERE id = :id;');
+        $response->bindValue(':id', $id);
+        $result = $response->execute();
+        if ($result == true) {
+            if ($salle_temp = $response->fetch()) {
+                return new Salle($salle_temp);
+            }
+            return false;
+        }
+
         return false;
     }
 }

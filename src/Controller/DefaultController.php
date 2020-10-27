@@ -26,7 +26,7 @@ class  DefaultController
         if (!isset($_SESSION['id'])) {
             $clavierCrypte = new ClavierCrypte();
             $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
-
+            $tabCor=$_SESSION['tab'];
             require_once __DIR__ . "/../View/Connexion/connexion.php";
         }
 
@@ -35,15 +35,15 @@ class  DefaultController
     }
 
     public static function connexion(){
-        if (isset($_POST['emailForm']) && isset($_POST['mdp'])) {
-            echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdp'].'<br>';
+        if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
+            echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdpCode'].'<br>';
         }
 
         if (isset($_SESSION['id'])) {
             //envoi d'un message
             DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
         } else {
-            if (isset($_POST['emailForm']) && isset($_POST['mdp'])) {
+            if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
 
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
@@ -54,7 +54,7 @@ class  DefaultController
                     unset($_SESSION['tab']);// on supprime le tableau dans la session
 
                     $clavierCrypte = new ClavierCrypte();
-                    $mdpReel = $clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdp"], $tableau);
+                    $mdpReel = $clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdpCode"], $tableau);
                 }else{
                     $mdpReel = null;
                 }
@@ -99,6 +99,24 @@ class  DefaultController
         require __DIR__ . '/../View/Reservations/main.php';
     }
 
+    public static function mesReservations()
+    {
+        $base = Repository::connect();
+        //Les resas
+        $reservationRepository = new ReservationRepository($base);
+        $mesResa = $reservationRepository->findAllById($_SESSION['id']);
+        if(count($mesResa)>0) {
+            //affichage de salles
+            $salleRepository = new SalleRepository($base);
+            //affichages creneaux
+            $creneauRepository = new CreneauRepository($base);
+            require __DIR__ . '/../View/MesReservations/main.php';
+        }else{
+            //envoi d'un message
+            self::alertMessage("warning", "Vous n'avez pas de reservations !");
+        }
+    }
+
     public static function deconnexion() {
         session_destroy();
         $_SESSION = null;
@@ -138,5 +156,6 @@ class  DefaultController
         }
 
     }
+
 
 }
