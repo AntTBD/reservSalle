@@ -30,7 +30,6 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::reservation();
     require __DIR__ . '/../src/View/Commons/footer.php';
-
 } elseif ('/index.php/verifConnect' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::verifConnect();
@@ -41,7 +40,10 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/afficherReservation' == $uri) {
     DefaultController::afficherReservation();
-
+} elseif ('/index.php/mesreservations' == $uri) {
+    require __DIR__ . '/../src/View/Commons/header.php';
+    DefaultController::mesReservations();
+    require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/generatePassword' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::generatePassword();

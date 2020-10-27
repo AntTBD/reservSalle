@@ -107,4 +107,16 @@ class ReservationRepository
         }
 
     }
+
+    public function findAllById($idUser)
+    {
+        $response = $this->base->prepare('SELECT * FROM reservation WHERE idUser=:idUser;');
+        $response->bindValue(':idUser', $idUser);
+        $resultats = $response->execute();
+        if($resultats==true){
+            $listResa=$response->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Reservation');
+            return $listResa;
+        }
+        return false;
+    }
 }

@@ -60,14 +60,15 @@ class Reservation
         $this->idCreneau = $idCreneau;
     }
 
+    // jour
     public function getJour()
     {
         return $this->jour;
     }
 
-    public function setJour($date)
+    public function setJour($jour)
     {
-        $this->jour = $date;
+        $this->jour = $jour;
     }
 
     public function hydrate(array $donnees)

@@ -1,3 +1,14 @@
+<style>
+    #securedKeyboard .btnMDP:focus{
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: transparent !important;
+        background-color: rgb(108, 117, 125) !important;
+    }
+    #securedKeyboard .btnMDP:hover{
+        background-color: rgb(90, 98, 104) !important;
+    }
+</style>
 
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -9,55 +20,54 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/index.php/connexion">
                 <div class="modal-body" id="modalBody">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Adresse email</label>
-                        <input type="email" class="form-control" name="emailForm" aria-describedby="emailHelp">
-                        <small id="emailHelp" class="form-text text-muted">format: exemplee@3il.fr</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Mot de passe</label>
-                        <div class="input-group mb-2">
-                            <input type="password" class="form-control" id="mdpInput" readonly>
-                            <div class="input-group-append">
-                                <span class="input-group-text btn btn-secondary" onclick='annuler()'>
-                                    <i class="fas fa-backspace"></i>
-                                </span>
-                            </div>
+                    <form method="POST" action="/index.php/connexion" id="formConnexion">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Adresse email</label>
+                            <input type="email" class="form-control" name="emailForm" aria-describedby="emailHelp">
+                            <small id="emailHelp" class="form-text text-muted">format: exemplee@3il.fr</small>
                         </div>
-                        <input type="password" class="form-control" name="mdp" id="mdpInputCode" readonly hidden>
-
-                        <small id="emailHelp" class="form-text text-muted">Gardez le pour vous</small>
-                        <!-- keyboard input -->
-                        <div id="securedKeyboard" class="text-center">
-                            <div class="btn-group-vertical mt-2">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                </div>
-                                <br>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
-                                    <button type="button" class="btn btn-secondary">-</button>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Mot de passe</label>
+                            <input type="password" class="form-control" name="mdpCode" id="mdpInputCode" readonly hidden>
+                            <div class="input-group mb-2">
+                                <input type="password" class="form-control" id="mdpInput" readonly>
+                                <div class="input-group-append">
+                                    <span class="input-group-text btn btn-secondary" onclick='annuler()'>
+                                        <i class="fas fa-backspace"></i>
+                                    </span>
                                 </div>
                             </div>
-
+                            <small id="mdpHelp" class="form-text text-muted">Gardez le pour vous</small>
                         </div>
+                    </form>
+                    <!-- keyboard input -->
+                    <div id="securedKeyboard" class="text-center">
+                        <div class="btn-group-vertical mt-2">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                            </div>
+                            <br>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                <button type="button" class="btn btn-secondary btnMDP">-</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="connexionBtn" type="submit" class="btn btn-primary" onclick="submitForm()">Connexion</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="connexionBtn" class="btn btn-primary" onclick="submitForm()">Connexion</button>
 
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -66,7 +76,7 @@
 
 <script>
 
-    var tabCorrespondances= <?= json_encode($_SESSION['tab']) ?>;
+    var tabCorrespondances= <?= json_encode($tabCor) ?>;
     var tabIndices = Array('0','1','2','3','4','5','6','7','8','9');
 
     var mdpInput = document.getElementById('mdpInput');
@@ -119,5 +129,10 @@
     }
 
     createClavier();
+
+    function submitForm()
+    {
+        document.getElementById("formConnexion").submit();
+    }
 
 </script>

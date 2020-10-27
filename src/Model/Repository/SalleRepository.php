@@ -58,4 +58,18 @@ class SalleRepository
         }
         return false;
     }
+
+    public function findById($id) {
+        $response = $this->base->prepare('SELECT * FROM salle WHERE id = :id;');
+        $response->bindValue(':id', $id);
+        $result = $response->execute();
+        if ($result == true) {
+            if ($salle_temp = $response->fetch()) {
+                return new Salle($salle_temp);
+            }
+            return false;
+        }
+
+        return false;
+    }
 }
