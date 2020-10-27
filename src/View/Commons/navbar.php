@@ -29,16 +29,18 @@ include __DIR__ . '/../../../includes/function.php';
                 <?php } ?>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item ">
-                        <?php if (isset($_SESSION["id"]) && isset($_SESSION["email"])){?>
+                        <?php if (isset($_SESSION["id"]) && isset($_SESSION["email"])){ ?>
                         <a href="/index.php/deconnexion" class="btn btn-primary">
                             <i class="fa fa-sign-out-alt" aria-hidden="true"></i> Déconnexion
                         </a>
-                        <?php } else { ?>
-                        <!-- Button trigger modal -->
-                        <button type="button" id="connexionModalBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal">
-                            Connexion
-                        </button>
-                        <?php } ?>
+                        <?php } else {
+                            if ('/index.php' == $uri || '/' == $uri) { ?>
+                            <!-- Button trigger modal -->
+                            <button type="button" id="connexionModalBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+                                Connexion
+                            </button>
+                            <?php }
+                        } ?>
                     </li>
                 </ul>
             </div>
