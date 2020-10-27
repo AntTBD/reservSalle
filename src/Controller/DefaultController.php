@@ -82,66 +82,86 @@ class  DefaultController
 
     public static function reservation()
     {
-        require __DIR__ . '/../View/Reservations/main.php';
+        if (isset($_SESSION['id'])) {
+            require __DIR__ . '/../View/Reservations/main.php';
+        }else{
+            //envoi d'un message
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
+        }
     }
 
     public static function reservationBDD(){
-        $base = Repository::connect();
-        $idUser = $_POST["idUser"];
-        $idSalle = $_POST["idSalle"];
-        $idCreneau = $_POST["idCreneau"];
-        $jour = $_POST["date"];
+        if (isset($_SESSION['id'])) {
+            $base = Repository::connect();
+            $idUser = $_POST["idUser"];
+            $idSalle = $_POST["idSalle"];
+            $idCreneau = $_POST["idCreneau"];
+            $jour = $_POST["date"];
 
-        echo "<h1> valeurs :::::: ".$idCreneau."  ".$idSalle." ".$idUser."  </h1>";
+            echo "<h1> valeurs :::::: ".$idCreneau."  ".$idSalle." ".$idUser."  </h1>";
 
-        $reservationRepository = new ReservationRepository($base);
-        $salleRepository = new SalleRepository($base);
-        $dispoRepository = new DispoRepository($base);
+            $reservationRepository = new ReservationRepository($base);
+            $salleRepository = new SalleRepository($base);
+            $dispoRepository = new DispoRepository($base);
 
-        $verif = $reservationRepository->add($idSalle,$idUser,$idCreneau,$jour); // On créer une reservation
-        if($verif == true){
-            $salle = $salleRepository->find(intval($idSalle));
-            $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
-            echo "<h1> count : ".$salles." et nbPlaces : ".$salle->getNbPlaces()."</h1>";
-            if($salles > $salle->getNbPlaces()){   //La salle est pleine a ce creneau
-                $dispoRepository->deleteByArguments(intval($idSalle),intval($idCreneau));
+            $verif = $reservationRepository->add($idSalle,$idUser,$idCreneau,$jour); // On créer une reservation
+            if($verif == true){
+                $salle = $salleRepository->find(intval($idSalle));
+                $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
+                echo "<h1> count : ".$salles." et nbPlaces : ".$salle->getNbPlaces()."</h1>";
+                if($salles > $salle->getNbPlaces()){   //La salle est pleine a ce creneau
+                    $dispoRepository->deleteByArguments(intval($idSalle),intval($idCreneau));
+                }
             }
+        }else{
+            //envoi d'un message
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
         }
 
     }
 
     public static function afficherReservation(){
-        $base = Repository::connect();
-        //affichage de salles
-        $salleRepository = new SalleRepository($base);
-        $salles = $salleRepository->findAll();
-        //affichages creneaux
-        $creneauRepository = new CreneauRepository($base);
-        $creneaux = $creneauRepository->findAll();
-        //Les dispos
-        $dispoRepository = new DispoRepository($base);
-        $dispos = $dispoRepository->findAll();
-        //Les resas
-        $reservationRepository = new ReservationRepository($base);
-        $resas = $reservationRepository;
-        require __DIR__ . '/../../includes/modals/tableResa.php';;
+        if (isset($_SESSION['id'])) {
+            $base = Repository::connect();
+            //affichage de salles
+            $salleRepository = new SalleRepository($base);
+            $salles = $salleRepository->findAll();
+            //affichages creneaux
+            $creneauRepository = new CreneauRepository($base);
+            $creneaux = $creneauRepository->findAll();
+            //Les dispos
+            $dispoRepository = new DispoRepository($base);
+            $dispos = $dispoRepository->findAll();
+            //Les resas
+            $reservationRepository = new ReservationRepository($base);
+            $resas = $reservationRepository;
+            require __DIR__ . '/../../includes/modals/tableResa.php';
+        }else{
+            //envoi d'un message
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
+        }
     }
 
     public static function mesReservations()
     {
-        $base = Repository::connect();
-        //Les resas
-        $reservationRepository = new ReservationRepository($base);
-        $mesResa = $reservationRepository->findAllByIdUser($_SESSION['id']);
-        if(count($mesResa)>0) {
-            //affichage de salles
-            $salleRepository = new SalleRepository($base);
-            //affichages creneaux
-            $creneauRepository = new CreneauRepository($base);
-            require __DIR__ . '/../View/MesReservations/main.php';
+        if (isset($_SESSION['id'])) {
+            $base = Repository::connect();
+            //Les resas
+            $reservationRepository = new ReservationRepository($base);
+            $mesResa = $reservationRepository->findAllByIdUser($_SESSION['id']);
+            if(count($mesResa)>0) {
+                //affichage de salles
+                $salleRepository = new SalleRepository($base);
+                //affichages creneaux
+                $creneauRepository = new CreneauRepository($base);
+                require __DIR__ . '/../View/MesReservations/main.php';
+            }else{
+                //envoi d'un message
+                self::alertMessage("warning", "Vous n'avez pas de reservations !");
+            }
         }else{
             //envoi d'un message
-            self::alertMessage("warning", "Vous n'avez pas de reservations !");
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
         }
     }
 
