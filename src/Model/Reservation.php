@@ -14,6 +14,8 @@ class Reservation
 
     private $idCreneau;
 
+    private $jour;
+
     // id
     public function getId()
     {
@@ -56,6 +58,16 @@ class Reservation
     public function setIdCreneau($idCreneau)
     {
         $this->idCreneau = $idCreneau;
+    }
+
+    public function getJour()
+    {
+        return $this->jour;
+    }
+
+    public function setJour($date)
+    {
+        $this->jour = $date;
     }
 
     public function hydrate(array $donnees)

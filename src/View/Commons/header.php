@@ -1,8 +1,4 @@
-<?php
 
-require __DIR__.'/../../../vendor/autoload.php';
-
-?>
 <!DOCTYPE html>
 <html class="h-100" lang="fr">
 <head>

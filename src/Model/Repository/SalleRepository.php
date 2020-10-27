@@ -4,6 +4,8 @@
 namespace App\Model\Repository;
 
 
+use App\Model\Salle;
+
 class SalleRepository
 {
     private $base;
@@ -11,6 +13,28 @@ class SalleRepository
     public function __construct(Repository $base)
     {
         $this->base = $base;
+    }
+
+    public function find($id)
+    {
+
+        $response = $this->base->prepare('SELECT * FROM salle');
+        $result = $response->execute();
+        $listSalle = $response->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Salle');
+        $salle = new Salle();
+        foreach ($listSalle as $list){
+            if($list->getId() == $id){
+                $salle->setId($id);
+                $salle->setDispo($list->getDispo());
+                $salle->setNbPlaces($list->getNbPlaces());
+                $salle->setNumSalle($list->getNumSalle());
+            }
+        }
+
+        return $salle;
+
+
+        return false;
     }
 
     public function add(Salle $salle)
