@@ -32,5 +32,6 @@ require __DIR__.'/../../../vendor/autoload.php';
 <?php
 require __DIR__.'/navbar.php';
 ?>
-<!-- Begin page content -->
-<main class="flex-shrink-0 mb-3" role="main">
+    <!-- Begin page content -->
+    <main class="flex-shrink-0 mb-3" role="main">
+        <div class="container mt-3">
