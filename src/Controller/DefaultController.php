@@ -82,8 +82,6 @@ class  DefaultController
 
     public static function reservation()
     {
-        $base = Repository::connect();
-
         require __DIR__ . '/../View/Reservations/main.php';
     }
 
@@ -134,7 +132,7 @@ class  DefaultController
         $base = Repository::connect();
         //Les resas
         $reservationRepository = new ReservationRepository($base);
-        $mesResa = $reservationRepository->findAllById($_SESSION['id']);
+        $mesResa = $reservationRepository->findAllByIdUser($_SESSION['id']);
         if(count($mesResa)>0) {
             //affichage de salles
             $salleRepository = new SalleRepository($base);

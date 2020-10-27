@@ -30,10 +30,6 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::reservation();
     require __DIR__ . '/../src/View/Commons/footer.php';
-} elseif ('/index.php/verifConnect' == $uri) {
-    require __DIR__ . '/../src/View/Commons/header.php';
-    DefaultController::verifConnect();
-    require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/reservationBDD' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::reservationBDD();

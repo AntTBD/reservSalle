@@ -32,9 +32,6 @@ class SalleRepository
         }
 
         return $salle;
-
-
-        return false;
     }
 
     public function add(Salle $salle)

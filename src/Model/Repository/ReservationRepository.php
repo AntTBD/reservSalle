@@ -108,7 +108,7 @@ class ReservationRepository
 
     }
 
-    public function findAllById($idUser)
+    public function findAllByIdUser($idUser)
     {
         $response = $this->base->prepare('SELECT * FROM reservation WHERE idUser=:idUser;');
         $response->bindValue(':idUser', $idUser);

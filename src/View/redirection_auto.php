@@ -1,4 +1,10 @@
 <!-- deconnexion -->
+<?php
+// avant d'appeler cette view :
+// penser à declarer $lien
+// penser à declarer $nomPage
+// penser à declarer $dureeEnSecondeAvantRedirection
+?>
 <!-- https://openclassrooms.com/forum/sujet/rediriger-apres-x-secondes-et-afficher-le-nombre-de-secon-35039#message-6572592 -->
 <center>
     <p>Redirection dans <span id="compt"></span> seconde<span id="s"></span>.
