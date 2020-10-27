@@ -30,4 +30,4 @@ require __DIR__.'/navbar.php';
 ?>
     <!-- Begin page content -->
     <main class="flex-shrink-0 mb-3" role="main">
-        <div class="container mt-3">
+        <div class="container-fluid mt-3">
