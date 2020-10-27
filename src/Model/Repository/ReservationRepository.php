@@ -15,15 +15,25 @@ class ReservationRepository
         $this->base = $base;
     }
 
-    public function add(Reservation $reservation)
+    public function add($idSalle, $idUser, $idCreneau, $jour) //Ajoute une reservation
     {
-        /*$response = $this->base->prepare('INSERT INTO user (email, mdp) VALUES(:email, :mdp)');
-        $response->bindValue(':name', $user->getEmail());
-        $response->bindValue(':mdp', $user->getMdp());
+        $response = $this->base->prepare('INSERT INTO reservation (idSalle, idUser, idCreneau,jour) VALUES(:idSalle, :idUser, :idCreneau,:jour)');
+        $response->bindValue(':idSalle', $idSalle);
+        $response->bindValue(':idUser', $idUser);
+        $response->bindValue(':idCreneau', $idCreneau);
+        var_dump($jour);
+        $resaDate = explode('/', $jour);
+        var_dump($resaDate);
+        $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
+        $response->bindValue(':jour', $resaDateString);
 
         $response->execute();
+        if($response == true){
+            return true;
+        }else{
+            return false;
+        }
 
-        $user->hydrate(['id' => $this->base->lastInsertId()]);*/
     }
 
     public function countsalle()
@@ -31,6 +41,22 @@ class ReservationRepository
         $reponse = $this->base->prepare('SELECT  COUNT(id)  FROM salle;  ');
         $resultats = $reponse->execute();
         return $resultats[0];
+    }
+
+    public function countResaBySalle($idSalle, $idCreneau){
+        //$reponse = $this->base->prepare('SELECT COUNT(id)  FROM reservation WHERE idSalle = :idSalle;  ');
+        $reponse = $this->base->prepare('SELECT * FROM reservation;');
+        $resultats = $reponse->execute();
+        $reponse->bindValue(':idSalle',$idSalle);
+        $listResa =$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Reservation');
+        $i =0;
+        foreach ($listResa as $resa){
+            if($resa->getIdSalle() == $idSalle && $resa->getIdCreneau() == $idCreneau){
+                $i++;
+            }
+        }
+
+        return $i;
     }
 
     public function findAll()
@@ -51,19 +77,30 @@ class ReservationRepository
         return $resultats;
     }
 
-    public function verifDispoSalle($nbPlaces,$idSalle,$idCreneau){
+    public function verifDispoSalle($nbPlaces,$idSalle,$idCreneau,$date,$idUser){
         $reservationRepository = new ReservationRepository($this->base);
         $resas = $reservationRepository->findAll();
-
+        $dejaReserv = false;
         $compteur = 0;
-
         foreach ($resas as $resa){
-            if($resa->getIdSalle() == $idSalle && $resa->getIdCreneau() == $idCreneau){
+            //Module de lecture de Dates
+            $resaDate = explode('-', $resa->getJour());
+            $resaDateString = $resaDate[0]."/".$resaDate[1]."/".$resaDate[2];
+
+            if($resa->getIdSalle() == $idSalle && $resa->getIdCreneau() == $idCreneau && $resaDateString == $date){
+                if($resa->getIdUser() == $idUser){
+                    $dejaReserv = true;
+                }
                 $compteur++;
             }
+
+
         }
 
-        if($compteur < $nbPlaces){
+        if( $dejaReserv == true){
+            return 2;
+        }elseif ($compteur <= $nbPlaces)
+        {
             return 1;
         }else{
             return 0;

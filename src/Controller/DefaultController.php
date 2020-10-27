@@ -111,6 +111,37 @@ class  DefaultController
     public static function reservation()
     {
         $base = Repository::connect();
+
+        require __DIR__ . '/../View/Reservations/main.php';
+    }
+
+    public static function reservationBDD(){
+        $base = Repository::connect();
+        $idUser = $_POST["idUser"];
+        $idSalle = $_POST["idSalle"];
+        $idCreneau = $_POST["idCreneau"];
+        $jour = $_POST["date"];
+
+        echo "<h1> valeurs :::::: ".$idCreneau."  ".$idSalle." ".$idUser."  </h1>";
+
+        $reservationRepository = new ReservationRepository($base);
+        $salleRepository = new SalleRepository($base);
+        $dispoRepository = new DispoRepository($base);
+
+        $verif = $reservationRepository->add($idSalle,$idUser,$idCreneau,$jour); // On créer une reservation
+        if($verif == true){
+            $salle = $salleRepository->find(intval($idSalle));
+            $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
+            echo "<h1> count : ".$salles." et nbPlaces : ".$salle->getNbPlaces()."</h1>";
+            if($salles > $salle->getNbPlaces()){   //La salle est pleine a ce creneau
+                $dispoRepository->deleteByArguments(intval($idSalle),intval($idCreneau));
+            }
+        }
+
+    }
+
+    public static function afficherReservation(){
+        $base = Repository::connect();
         //affichage de salles
         $salleRepository = new SalleRepository($base);
         $salles = $salleRepository->findAll();
@@ -123,8 +154,7 @@ class  DefaultController
         //Les resas
         $reservationRepository = new ReservationRepository($base);
         $resas = $reservationRepository;
-
-        require __DIR__ . '/../View/Reservations/main.php';
+        require __DIR__ . '/../../includes/modals/tableResa.php';;
     }
 
     public static function deconnexion() {

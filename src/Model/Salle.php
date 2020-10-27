@@ -93,4 +93,15 @@ class Salle
     {
         return substr(strrchr(__CLASS__, "\\"), 1);
     }
+
+    public static function load($id, $dispo, $numSalle, $nbPlaces)
+    {
+        $salle = new self();
+        $salle->setId($id);
+        $salle->setDispo($dispo);
+        $salle->setNumSalle($numSalle);
+        $salle->setNbPlaces($nbPlaces);
+        return $salle;
+
+    }
 }

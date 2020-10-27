@@ -37,9 +37,12 @@ class DispoRepository
         return false;
     }
 
-    public function findBySalle($idSalle){
-        $reponse = $this->base->prepare('SELECT * FROM dispo WHERE idSalle = :salle;');
+    public function findBySalle($idSalle, $jour){
+        $reponse = $this->base->prepare('SELECT * FROM dispo WHERE idSalle = :salle && jour = :jour;');
         $reponse->bindValue(':salle',$idSalle);
+        $date = explode('/', $jour);
+        $dateString = $date[0]."-".$date[1]."-".$date[2];
+        $reponse->bindValue(':jour',$dateString);
         $resultats = $reponse->execute();
 
         if($resultats==true){
@@ -48,5 +51,12 @@ class DispoRepository
         }
 
         return false;
+    }
+
+    public function deleteByArguments($idSalle, $idCreneau){
+        $reponse = $this->base->prepare('DELETE FROM dispo WHERE idSalle = :idSalle && idCreneau = :idCreneau ');
+        $reponse->bindValue(':idSalle',$idSalle);
+        $reponse->bindValue(':idCreneau',$idCreneau);
+        return $resultats = $reponse->execute();
     }
 }
