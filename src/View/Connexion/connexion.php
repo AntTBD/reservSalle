@@ -63,6 +63,10 @@
 
                     </div>
                 </div>
+            <input type="hidden" name="token" id="token" value="<?php
+            //Le champ caché a pour valeur le jeton
+            echo "".$token;
+            ?>"/>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button id="connexionBtn" class="btn btn-primary" onclick="submitForm()">Connexion</button>
