@@ -1,17 +1,15 @@
 <?php
 
 namespace App\Model;
-use App\Creneau;
-use App\Salle;
 
 class Dispo
 {
 
-    private $Date;
+    private $date;
 
     private $idCreneau;
 
-    private $salle;
+    private $idSalle;
 
     // date
     public function getDate()
@@ -46,7 +44,7 @@ class Dispo
     // salle
     public function getIdSalle()
     {
-        return $this->salle;
+        return $this->idSalle;
     }
 
     public function setIdSalle($idSalle)

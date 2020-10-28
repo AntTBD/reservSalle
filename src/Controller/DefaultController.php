@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Model\Dispo;
 use App\Model\Repository\CreneauRepository;
 use App\Model\ClavierCrypte;
 use App\Model\Repository\Repository;
@@ -10,6 +11,7 @@ use App\Model\Repository\ReservationRepository;
 use App\Model\Repository\SalleRepository;
 use App\Model\Repository\UserRepository;
 use App\model\Repository\DispoRepository;
+use App\Model\Reservation;
 
 class  DefaultController
 {
@@ -92,25 +94,27 @@ class  DefaultController
 
     public static function reservationBDD(){
         if (isset($_SESSION['id'])) {
-            $base = Repository::connect();
-            $idUser = $_POST["idUser"];
-            $idSalle = $_POST["idSalle"];
-            $idCreneau = $_POST["idCreneau"];
-            $jour = $_POST["date"];
+            if (isset($_POST['idUser']) && isset($_POST['idSalle']) && isset($_POST['idCreneau']) && isset($_POST['date'])) {
+                $base = Repository::connect();
+                $idUser = $_POST["idUser"];
+                $idSalle = $_POST["idSalle"];
+                $idCreneau = $_POST["idCreneau"];
+                $jour = $_POST["date"];
 
-            echo "<h1> valeurs :::::: ".$idCreneau."  ".$idSalle." ".$idUser."  </h1>";
+                echo "<h1> valeurs :::::: " . $idCreneau . "  " . $idSalle . " " . $idUser . "  </h1>";
 
-            $reservationRepository = new ReservationRepository($base);
-            $salleRepository = new SalleRepository($base);
-            $dispoRepository = new DispoRepository($base);
+                $reservationRepository = new ReservationRepository($base);
+                $salleRepository = new SalleRepository($base);
+                $dispoRepository = new DispoRepository($base);
 
-            $verif = $reservationRepository->add($idSalle,$idUser,$idCreneau,$jour); // On créer une reservation
-            if($verif == true){
-                $salle = $salleRepository->find(intval($idSalle));
-                $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
-                echo "<h1> count : ".$salles." et nbPlaces : ".$salle->getNbPlaces()."</h1>";
-                if($salles > $salle->getNbPlaces()){   //La salle est pleine a ce creneau
-                    $dispoRepository->deleteByArguments(intval($idSalle),intval($idCreneau));
+                $verif = $reservationRepository->add($idSalle, $idUser, $idCreneau, $jour); // On créer une reservation
+                if ($verif == true) {
+                    $salle = $salleRepository->find(intval($idSalle));
+                    $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
+                    echo "<h1> count : " . $salles . " et nbPlaces : " . $salle->getNbPlaces() . "</h1>";
+                    if ($salles > $salle->getNbPlaces()) {   //La salle est pleine a ce creneau
+                        $dispoRepository->deleteByArguments(intval($idSalle), intval($idCreneau));
+                    }
                 }
             }
         }else{
@@ -136,13 +140,23 @@ class  DefaultController
             $reservationRepository = new ReservationRepository($base);
             $resas = $reservationRepository;
             require __DIR__ . '/../../includes/modals/tableResa.php';
-        }else{
+        } else {
             //envoi d'un message
             DefaultController::alertMessage("danger", "Veuillez vous connecter !");
         }
     }
 
     public static function mesReservations()
+    {
+        if (isset($_SESSION['id'])) {
+            require __DIR__ . '/../View/MesReservations/main.php';
+        }else{
+            //envoi d'un message
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
+        }
+    }
+
+    public static function afficherMesReservations()
     {
         if (isset($_SESSION['id'])) {
             $base = Repository::connect();
@@ -154,10 +168,53 @@ class  DefaultController
                 $salleRepository = new SalleRepository($base);
                 //affichages creneaux
                 $creneauRepository = new CreneauRepository($base);
-                require __DIR__ . '/../View/MesReservations/main.php';
+                require __DIR__ . '/../View/MesReservations/tableMesResa.php';
             }else{
                 //envoi d'un message
                 self::alertMessage("warning", "Vous n'avez pas de reservations !");
+            }
+        }else{
+            //envoi d'un message
+            DefaultController::alertMessage("danger", "Veuillez vous connecter !");
+        }
+    }
+
+    public static function annulerReservation()
+    {
+        if (isset($_SESSION['id'])) {
+            if (isset($_POST['idReservation'])) {
+                $base = Repository::connect();
+                $idReservation = $_POST["idReservation"];
+                //$idReservation = $_GET["idReservation"];
+
+
+                $reservationRepository = new ReservationRepository($base);
+                $resa= $reservationRepository->find($idReservation);
+                if ($resa != false) {
+                    $verifDeleteResa = $reservationRepository->delete($idReservation); // On créer une reservation
+                    if ($verifDeleteResa == true) {
+                        $dispoRepository = new DispoRepository($base);
+                        $dispo_temp = new Dispo([
+                            "id"=>$resa->getJour(),
+                            "idSalle"=>$resa->getIdSalle(),
+                            "idCreneau"=> $resa->getIdCreneau()
+                        ]);
+                        $verifFindDispo = $dispoRepository->findByAll($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
+                        if($verifFindDispo == false) {//si il n'y a pas de dispo on en crée une puisque qu'on vient de liberer une place
+                            $verifAddDispo = $dispoRepository->add($dispo_temp);
+                            if ($verifAddDispo == true) {
+                                //envoi d'un message
+                                DefaultController::alertMessage("success", "La réservation a bien été supprimée.");
+                            } else {
+                                //envoi d'un message
+                                DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une dispo' !");
+                            }
+                        }
+                    } else {
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite lors de la suppression d'une reservation !");
+                    }
+                }
             }
         }else{
             //envoi d'un message

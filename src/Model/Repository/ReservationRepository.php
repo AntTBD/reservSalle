@@ -70,13 +70,6 @@ class ReservationRepository
         return false;
     }
 
-    public function findOne()
-    {
-        $reponse = $this->base->prepare('SELECT * FROM reservation WHERE id =1;');
-        $resultats = $reponse->execute();
-        return $resultats;
-    }
-
     public function verifDispoSalle($nbPlaces,$idSalle,$idCreneau,$date,$idUser){
         $reservationRepository = new ReservationRepository($this->base);
         $resas = $reservationRepository->findAll();
@@ -118,5 +111,31 @@ class ReservationRepository
             return $listResa;
         }
         return false;
+    }
+
+    public function find($id)
+    {
+        $response = $this->base->prepare('SELECT * FROM reservation WHERE id = :id');
+        $response->bindValue(':id', $id);
+        $result = $response->execute();
+        if ($result === true) {
+            if ($resa_temp = $response->fetch()) {
+                return new Reservation($resa_temp);
+            }
+        }
+        return false;
+    }
+
+    public function delete($idReservation)
+    {
+        $response = $this->base->prepare('DELETE FROM reservation  WHERE id = :id;');
+        $response->bindValue(':id', $idReservation);
+
+        $response->execute();
+        if($response->rowcount()==null) {
+            return false;
+        }else{
+            return true;
+        }
     }
 }
