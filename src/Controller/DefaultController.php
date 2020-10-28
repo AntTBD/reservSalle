@@ -11,7 +11,6 @@ use App\Model\Repository\ReservationRepository;
 use App\Model\Repository\SalleRepository;
 use App\Model\Repository\UserRepository;
 use App\model\Repository\DispoRepository;
-use App\Model\Reservation;
 
 class  DefaultController
 {
@@ -25,62 +24,61 @@ class  DefaultController
 
     public static function accueil()
     {
+
         if (!isset($_SESSION['id'])) {
             $clavierCrypte = new ClavierCrypte();
             $_SESSION["tab"] = $clavierCrypte->createTabCorrespondance();// on le sauvegarde en session
             $tabCor=$_SESSION['tab'];
+            $token = self::generer_token('reserv');
             require_once __DIR__ . "/../View/Connexion/connexion.php";
         }
-
         require __DIR__ . '/../View/Accueil/accueil.php';
 
     }
 
-    public static function connexion(){
+    public static function connexion()
+    {
         if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
-            echo 'infos sended : '.$_POST['emailForm']."   ".$_POST['mdpCode'].'<br>';
+            echo 'infos sended : ' . $_POST['emailForm'] . "   " . $_POST['mdpCode'] . '<br>';
         }
+        if (self::verifier_token(600, 'forum')) {
+            if (isset($_SESSION['id'])) {
+                //envoi d'un message
+                DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
+            } else {
+                if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
 
-        if (isset($_SESSION['id'])) {
-            //envoi d'un message
-            DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
-        } else {
-            if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
+                    $base = Repository::connect();
+                    $userRepository = new UserRepository($base);
 
-                $base = Repository::connect();
-                $userRepository = new UserRepository($base);
+                    if (isset($_SESSION["tab"])) {
 
-                if(isset($_SESSION["tab"])) {
+                        $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
+                        unset($_SESSION['tab']);// on supprime le tableau dans la session
 
-                    $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
-                    unset($_SESSION['tab']);// on supprime le tableau dans la session
+                        $clavierCrypte = new ClavierCrypte();
+                        $mdpReel = $clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdpCode"], $tableau);
+                    } else {
+                        $mdpReel = null;
+                    }
+                    if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
+                        $_SESSION["state"] = "errorMdp";
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-                    $clavierCrypte = new ClavierCrypte();
-                    $mdpReel = $clavierCrypte->mdpConvertedFromTabCorrespondance($_POST["mdpCode"], $tableau);
-                }else{
-                    $mdpReel = null;
-                }
-                if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
-
-                    //envoi d'un message
-                    DefaultController::alertMessage("success", "Vous êtes connecté.");
-
-                    //envoi de la redirection auto
-                    self::redirectionAuto( "/index.php/reservation", "RESERVATIONS", 5);
-
-
-                } else {
-                    //envoi d'un message
-                    DefaultController::alertMessage("danger", "Ce compte n'existe pas !<br>Veuillez réessayer.");
-
-                    //envoi de la redirection auto
-                    self::redirectionAuto( "/", "ACCUEIL", 5);
-
+                        //envoi de la redirection auto
+                        self::redirectionAuto("/index.php/reservation", "RESERVATIONS", 5);
+                    }
                 }
             }
         }
+       else {
+           //envoi d'un message
+           DefaultController::alertMessage("danger", "mauvais token");
+       }
 
     }
+
 
     public static function reservation()
     {
@@ -247,6 +245,7 @@ class  DefaultController
         require __DIR__ . '/../View/alertMessage.php';
     }
 
+
     public static function redirectionAuto($lien, $nomPage, $dureeEnSecondeAvantRedirection)
     {
         require __DIR__ . '/../View/redirection_auto.php';
@@ -263,4 +262,21 @@ class  DefaultController
     }
 
 
+
+    public static function generer_token($nom = '')
+    {
+        $token = uniqid(rand(), true);
+        $_SESSION[$nom.'_token'] = $token;
+        $_SESSION[$nom.'_token_time'] = time();
+        return $token;
+    }
+
+    public static function verifier_token($temps, $nom = '')
+    {
+        if(isset($_SESSION[$nom.'_token']) && isset($_SESSION[$nom.'_token_time']) && isset($_POST['token']))
+            if($_SESSION[$nom.'_token'] == $_POST['token'])
+                if($_SESSION[$nom.'_token_time'] >= (time() - $temps))
+                        return true;
+        return false;
+    }
 }

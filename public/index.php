@@ -55,8 +55,11 @@ if ('/index.php' == $uri || '/' == $uri) {
 }
 
 
+
 //on affiche le contenu de ce tampon
 //ob_end_flush();
 
 //var_dump($_SESSION);
 //phpinfo();
+
+//echo "<script>console.log(".var_dump($_SESSION).");</script>";
