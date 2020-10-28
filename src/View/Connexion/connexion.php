@@ -61,13 +61,11 @@
                                 <button type="button" class="btn btn-secondary btnMDP">-</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button id="connexionBtn" class="btn btn-primary" onclick="submitForm()">Connexion</button>
-
             </div>
         </div>
     </div>
