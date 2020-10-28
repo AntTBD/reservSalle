@@ -39,29 +39,32 @@
                                 </div>
                             </div>
                             <small id="mdpHelp" class="form-text text-muted">Gardez le pour vous</small>
+                            <!-- keyboard input -->
+                            <div id="securedKeyboard" class="text-center">
+                                <div class="btn-group-vertical mt-2">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                    </div>
+                                    <br>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                        <button type="button" class="btn btn-secondary btnMDP">-</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <input type="hidden" class="form-control" name="token" id="token" value="<?= $token //Le champ caché a pour valeur le jeton  ?>">
+                        <div class="form-group <?php if(isset($testToken) && $testToken==false){ echo "d-none";} ?>">
+                            <label for="token">Token CSRF</label>
+                            <input type="<?php if(isset($testToken) && $testToken==false){ echo "hidden";} ?>" class="form-control" name="token" id="token" value="<?php  if(isset($token)){ echo $token;} //Le champ caché a pour valeur le jeton  ?>" <?php if(isset($testToken) && $testToken==false){ echo "readonly";} ?>>
+                        </div>
                     </form>
-                    <!-- keyboard input -->
-                    <div id="securedKeyboard" class="text-center">
-                        <div class="btn-group-vertical mt-2">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                            </div>
-                            <br>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                                <button type="button" class="btn btn-secondary btnMDP">-</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
