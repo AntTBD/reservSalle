@@ -19,27 +19,30 @@ class  DefaultController
 
     public static function accueil()
     {
+        $token = self::generer_token('reserv');
         require __DIR__ . '/../View/Accueil/accueil.php';
+
     }
 
-    public static function verifConnect(){
+    public static function verifConnect()
+    {
+        if ( self::verifier_token(600,'forum')) {
+            if (isset($_SESSION['id'])) {
+                //envoi d'un message
+                DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
+            } else {
+                if (isset($_POST['emailForm']) && isset($_POST['mdp'])) {
 
-        if (isset($_SESSION['id'])) {
-            //envoi d'un message
-            DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
-        } else {
-            if (isset($_POST['emailForm']) && isset($_POST['mdp'])) {
+                    $base = Repository::connect();
+                    $userRepository = new UserRepository($base);
 
-                $base = Repository::connect();
-                $userRepository = new UserRepository($base);
+                    if ($userRepository->login($_POST['emailForm'], $_POST['mdp'])) {
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Vous êtes connecté.");
 
-                if ($userRepository->login($_POST['emailForm'], $_POST['mdp'])) {
-                    //envoi d'un message
-                    DefaultController::alertMessage("success", "Vous êtes connecté.");
-
-                    header("Location: /index.php/reservation");
-                    exit();
-
+                        header("Location: /index.php/reservation");
+                        exit();
+                    }
                 } else {
                     //envoi d'un message
                     DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
@@ -47,16 +50,19 @@ class  DefaultController
                     $_SESSION["state"] = "errorMdp";
                     header("Location: /");
                     exit();
-
                 }
             }
+        } else {
+            // token non vérifié => erreur
+            DefaultController::alertMessage("danger", "Ce compte n'existe pas !");
         }
+    }
 
 //A FAIRE : message d'erreur sur le mot de passe !
 // ant: utilise le controller avec la fonction alertMessage($typeAlert, $messageAlert)
 
 
-    }
+
 
     public static function reservation()
     {
@@ -111,4 +117,21 @@ class  DefaultController
         require __DIR__ . '/../View/alertMessage.php';
     }
 
+
+    public static function generer_token($nom = '')
+    {
+        $token = uniqid(rand(), true);
+        $_SESSION[$nom.'_token'] = $token;
+        $_SESSION[$nom.'_token_time'] = time();
+        return $token;
+    }
+
+    public static function verifier_token($temps, $nom = '')
+    {
+        if(isset($_SESSION[$nom.'_token']) && isset($_SESSION[$nom.'_token_time']) && isset($_POST['token']))
+            if($_SESSION[$nom.'_token'] == $_POST['token'])
+                if($_SESSION[$nom.'_token_time'] >= (time() - $temps))
+                        return true;
+        return false;
+    }
 }

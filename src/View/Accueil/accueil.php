@@ -36,6 +36,10 @@
                             <input type="password" class="form-control"  name="mdp">
                             <small id="emailHelp" class="form-text text-muted">Gardez le pour vous</small>
                         </div>
+                      <input type="hidden" name="token" id="token" value="<?php
+                        //Le champ caché a pour valeur le jeton
+                      echo "".$token;
+                        ?>"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
