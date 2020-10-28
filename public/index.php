@@ -62,4 +62,3 @@ if ('/index.php' == $uri || '/' == $uri) {
 //var_dump($_SESSION);
 //phpinfo();
 
-//echo "<script>console.log(".var_dump($_SESSION).");</script>";

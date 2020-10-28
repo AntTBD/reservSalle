@@ -41,7 +41,7 @@ class  DefaultController
         if (isset($_POST['emailForm']) && isset($_POST['mdpCode'])) {
             echo 'infos sended : ' . $_POST['emailForm'] . "   " . $_POST['mdpCode'] . '<br>';
         }
-        if (self::verifier_token(600, 'forum')) {
+        if (self::verifier_token(600, 'reserv')) {
             if (isset($_SESSION['id'])) {
                 //envoi d'un message
                 DefaultController::alertMessage("warning", "Vous êtes déjà connecté");
@@ -62,7 +62,7 @@ class  DefaultController
                         $mdpReel = null;
                     }
                     if ($userRepository->login($_POST['emailForm'], $mdpReel)) {
-                        $_SESSION["state"] = "errorMdp";
+
                         //envoi d'un message
                         DefaultController::alertMessage("success", "Vous êtes connecté.");
 
@@ -273,10 +273,13 @@ class  DefaultController
 
     public static function verifier_token($temps, $nom = '')
     {
-        if(isset($_SESSION[$nom.'_token']) && isset($_SESSION[$nom.'_token_time']) && isset($_POST['token']))
-            if($_SESSION[$nom.'_token'] == $_POST['token'])
-                if($_SESSION[$nom.'_token_time'] >= (time() - $temps))
-                        return true;
+        if(isset($_SESSION[$nom.'_token']) && isset($_SESSION[$nom.'_token_time']) && isset($_POST['token'])) {
+            if ($_SESSION[$nom . '_token'] == $_POST['token']) {
+                if ($_SESSION[$nom . '_token_time'] >= (time() - $temps)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

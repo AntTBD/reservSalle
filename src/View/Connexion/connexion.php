@@ -40,6 +40,7 @@
                             </div>
                             <small id="mdpHelp" class="form-text text-muted">Gardez le pour vous</small>
                         </div>
+                        <input type="hidden" class="form-control" name="token" id="token" value="<?= $token //Le champ caché a pour valeur le jeton  ?>">
                     </form>
                     <!-- keyboard input -->
                     <div id="securedKeyboard" class="text-center">
@@ -63,10 +64,6 @@
 
                     </div>
                 </div>
-            <input type="hidden" name="token" id="token" value="<?php
-            //Le champ caché a pour valeur le jeton
-            echo "".$token;
-            ?>"/>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button id="connexionBtn" class="btn btn-primary" onclick="submitForm()">Connexion</button>
