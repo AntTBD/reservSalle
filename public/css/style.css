@@ -1,0 +1,6 @@
+#table_resa th:first-child
+{
+    position:sticky;
+    z-index: 1;
+    left:1px;
+}
