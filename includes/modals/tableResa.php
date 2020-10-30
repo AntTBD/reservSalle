@@ -1,7 +1,15 @@
 <?php $date = $_POST["date"]; //String contenant la date selectionné?>
 <input id="date" value="<?php echo $date?>" hidden>
-
-<table class="table table-bordered">
+<style>
+    #table_resa th:first-child
+    {
+        position:sticky;
+        z-index: 1;
+        left:1px;
+    }
+</style>
+<div class="table-responsive">
+<table class="table table-bordered" id="table_resa">
     <thead class="thead-dark" style="table-layout:fixed; text-align:center;vertical-align:";  >
     <div id =test >
         <tr>
@@ -16,7 +24,7 @@
 
     <?php $verif = 0; $salleValid = 0;
     foreach ($creneaux as $creneau){                //On affiche tout les creneaux (les lignes)
-        echo "<tr><th scope='row'>".$creneau->getHeureDebut()."</th>";
+        echo "<tr><th scope='row' class='table-dark'>".$creneau->getHeureDebut()."</th>";
 
         foreach ($salles as $salle){            //On parcours toutes les salles (les colomnes)
             $salleValid = 0;
@@ -53,3 +61,4 @@
     }?>
     </tbody>
 </table>
+</div>

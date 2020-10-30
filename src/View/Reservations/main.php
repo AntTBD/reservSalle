@@ -11,6 +11,7 @@
         </div>
         <div class="col-sm">
             <select class="custom-select mr-sm-2" id="selectDate" onchange="afficherResa()">
+                <option value="<?php date('Y/m/d', strtotime("Today")) ?>">Choisir une date</option>
                 <?php $startdate=strtotime("Today");
                 $enddate=strtotime("+3 weeks", $startdate);
                 while ($startdate < $enddate) {
