@@ -12,6 +12,8 @@ class User
 
     private $mdp;
 
+    private $admin;
+
     // id
     public function getId()
     {
@@ -43,6 +45,17 @@ class User
     public function setMdp($mdp)
     {
         $this->mdp = $mdp;
+    }
+
+    // admin
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin($admin)
+    {
+        $this->admin = $admin;
     }
 
     public function hydrate(array $donnees)

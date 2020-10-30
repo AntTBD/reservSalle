@@ -61,4 +61,11 @@ class CreneauRepository
 
     }
 
+    public function modifyById($id,$heureDebut){
+        $response = $this->base->prepare('UPDATE Creneau SET heureDebut = :heureDebut WHERE id = :id');
+        $response->bindValue(':id', $id);
+        $response->bindValue(':heureDebut', $heureDebut);
+        return $response->execute();
+    }
+
 }

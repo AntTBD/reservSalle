@@ -28,6 +28,16 @@ class UserRepository
         $user->hydrate(['id' => $this->base->lastInsertId()]);
     }
 
+    public function save($email,$mdp,$admin)
+    {
+        $response = $this->base->prepare('INSERT INTO user (email, mdp, admin) VALUES(:email, :mdp, :admin)');
+        $response->bindValue(':email', $email);
+        $response->bindValue(':mdp', $mdp);
+        $response->bindValue(':admin', $admin);
+
+        $response->execute();
+    }
+
     public function exists(User $user) {
         $response = $this->base->prepare('SELECT COUNT(*) FROM user WHERE email = :email;');
         $response->bindValue(':email', $user->getEmail());
@@ -55,6 +65,7 @@ class UserRepository
                     //$user = $this->find($result['id']);
                     $_SESSION['id'] = $user->getId();
                     $_SESSION['email'] = $user->getEmail();
+                    $_SESSION['admin'] = $user->getAdmin();
                     return $user;
                 }
                 return false;
@@ -76,6 +87,26 @@ class UserRepository
             }
         }
         return false;
+
+    }
+
+    public function delete($id)
+    {
+        $response = $this->base->prepare('DELETE FROM user  WHERE id = :id;');
+        $response->bindValue(':id', $id);
+        return $response->execute();
+
+    }
+
+    public function modifyById($id,$email,$admin){
+        if($email != 0 || $email != false ){
+
+        }
+        $response = $this->base->prepare('UPDATE user SET admin = :admin, email = :email WHERE id = :id');
+        $response->bindValue(':id', $id);
+        $response->bindValue(':admin', $admin);
+        $response->bindValue(':email', $email);
+        return $response->execute();
 
     }
 

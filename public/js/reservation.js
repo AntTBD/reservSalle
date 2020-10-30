@@ -33,19 +33,3 @@ function reservation(idSalle,idCreneau,idUser,date) {
     });
 
 }
-
-
-
-/*
- $.ajax({
-            url      : 'http://reservsalle/modals/connexionHead.html',
-            type     : 'POST',
-            cache		: 	false,
-            success 	: 	function(result) {
-                $('#modalHeader').html(result);
-            },
-            error : function(){
-                alert("eror");
-            }
-        });
- */

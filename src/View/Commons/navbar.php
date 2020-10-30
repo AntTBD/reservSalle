@@ -26,6 +26,14 @@ include __DIR__ . '/../../../includes/function.php';
                         <a class="nav-link <?php if (isActive("index.php/mesreservations")) { echo "active"; } ?>" href="/index.php/mesreservations">Mes Reservations</a>
                     </li>
                 </ul>
+                <?php if(isset($_SESSION["admin"])){
+                    if($_SESSION["admin"] == 1){ ?>
+                        <ul class="navbar-nav">
+                            <li class="nav-item ">
+                                <a class="nav-link <?php if (isActive("index.php/admin")) { echo "active"; } ?>" href="/index.php/admin">Admin</a>
+                            </li>
+                        </ul>
+                        <?php }} ?>
                 <?php } ?>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item ">

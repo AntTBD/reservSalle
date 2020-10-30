@@ -48,6 +48,48 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::generatePassword();
     require __DIR__ . '/../src/View/Commons/footer.php';
+} elseif ('/index.php/admin' == $uri) {
+    require __DIR__ . '/../src/View/Commons/header.php';
+    DefaultController::admin();
+    require __DIR__ . '/../src/View/Commons/footer.php';
+} elseif ('/index.php/afficherUser' == $uri) {
+    DefaultController::afficherUser();
+} elseif ('/index.php/deleteUser' == $uri) {
+    DefaultController::deleteUser();
+} elseif ('/index.php/modifierUser' == $uri) {
+    DefaultController::modifierUser();
+} elseif ('/index.php/modiferUserBdd' == $uri) {
+    DefaultController::modiferUserBdd();
+} elseif ('/index.php/ajouterUser' == $uri) {
+    DefaultController::ajouterUser();
+} elseif ('/index.php/ajouterUserBdd' == $uri) {
+    DefaultController::ajouterUserBdd();
+} elseif ('/index.php/afficherDispo' == $uri) {
+    DefaultController::afficherDispo();
+} elseif ('/index.php/deleteDispo' == $uri) {
+    DefaultController::deleteDispo();
+} elseif ('/index.php/ajouterDispo' == $uri) {
+    DefaultController::ajouterDispo();
+} elseif ('/index.php/ajouterDispoBdd' == $uri) {
+    DefaultController::ajouterDispoBdd();
+} elseif ('/index.php/afficherSalles' == $uri) {
+    DefaultController::afficherSalles();
+} elseif ('/index.php/ajouterSalle' == $uri) {
+    DefaultController::ajouterSalle();
+} elseif ('/index.php/ajouterSalleBdd' == $uri) {
+    DefaultController::ajouterSalleBdd();
+} elseif ('/index.php/deleteSalle' == $uri) {
+    DefaultController::deleteSalle();
+} elseif ('/index.php/modifierSalle' == $uri) {
+    DefaultController::modifierSalle();
+} elseif ('/index.php/modiferSalleBdd' == $uri) {
+    DefaultController::modiferSalleBdd();
+}  elseif ('/index.php/afficherCreneau' == $uri) {
+    DefaultController::afficherCreneau();
+} elseif ('/index.php/modifierCreneau' == $uri) {
+    DefaultController::modifierCreneau();
+} elseif ('/index.php/modiferCreneauBdd' == $uri) {
+    DefaultController::modiferCreneauBdd();
 } else {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::erreur404();

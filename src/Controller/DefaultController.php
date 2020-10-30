@@ -58,7 +58,7 @@ class  DefaultController
                         $base = Repository::connect();
                         $userRepository = new UserRepository($base);
 
-                        if (isset($_SESSION["tab"])) {
+                        if (isset($_SESSION["tab"])) {  //Verifie le mdp
 
                             $tableau = $_SESSION["tab"];// on recupère le tableau mélangé
                             unset($_SESSION['tab']);// on supprime le tableau dans la session
@@ -91,7 +91,6 @@ class  DefaultController
 
 
     }
-
 
     public static function reservation()
     {
@@ -242,6 +241,171 @@ class  DefaultController
         self::redirectionAuto("/", "ACCUEIL", 5);
     }
 
+    public static function admin(){
+        if(isset($_SESSION["id"])){
+            if($_SESSION["admin"] == 1){
+                $base = Repository::connect();
+                //affichage de salles
+                $salleRepository = new SalleRepository($base);
+                $salles = $salleRepository->findAll();
+                //affichages creneaux
+                $creneauRepository = new CreneauRepository($base);
+                $creneaux = $creneauRepository->findAll();
+                //Les dispos
+                $dispoRepository = new DispoRepository($base);
+                $dispos = $dispoRepository->findAll();
+                //Les resas
+                $reservationRepository = new ReservationRepository($base);
+                $resas = $reservationRepository;
+
+                require __DIR__ . '/../View/admin/admin.php';
+            }else{
+                DefaultController::alertMessage("danger", "Vous n'avez les droits !");
+            }
+        }else{
+            DefaultController::alertMessage("danger", "Vous n'êtes pas conecté !");
+        }
+
+
+    }
+
+    public static function afficherUser(){
+        $base = Repository::connect();
+        $userRepository = new UserRepository($base);
+        $users = $userRepository->findAll();
+
+        require __DIR__ . '/../View/admin/afficherUser.php';
+    }
+
+    public static function deleteUser(){
+        $base = Repository::connect();
+        $userRepository = new UserRepository($base);
+        $user = $userRepository->delete($_POST["id"]);
+
+        if($user){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function modifierUser(){
+        require __DIR__ . '/../View/admin/modifierUserForm.html';
+    }
+
+    public static function modiferUserBdd(){
+        $base = Repository::connect();
+        $userRepository = new UserRepository($base);
+        $userRepository->modifyById($_POST["id"],$_POST["email"],$_POST["admin"]);
+        return $userRepository;
+    }
+
+    public static function ajouterUser(){
+        require __DIR__ . '/../View/admin/addUserForm.html';
+    }
+
+    public static function ajouterUserBdd(){
+        $base = Repository::connect();
+        $userRepository = new UserRepository($base);
+        $userRepository->save($_POST["email"],$_POST["mdp"],$_POST["admin"]);
+        return $userRepository;
+    }
+
+    public static function afficherDispo(){
+        $base = Repository::connect();
+        $dispoRepository = new DispoRepository($base);
+        $dispos = $dispoRepository->findAll();
+
+        require __DIR__ . '/../View/admin/afficherDispo.php';
+    }
+
+    public static function deleteDispo(){
+        $base = Repository::connect();
+        $dispoRepository = new DispoRepository($base);
+        $user = $dispoRepository->deleteByArguments($_POST["idSalle"],$_POST["idCreneau"]);
+
+        if($user){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function ajouterDispo(){
+        require __DIR__ . '/../View/admin/addDispoForm.html';
+    }
+
+    public static function ajouterDispoBdd(){
+        $base = Repository::connect();
+        $dispoRepository = new DispoRepository($base);
+        $dispoRepository->add($_POST["jour"],$_POST["idSalle"],$_POST["idCreneau"]);
+        return $dispoRepository;
+    }
+
+    public static function afficherSalles(){
+        $base = Repository::connect();
+        $salleRepository = new SalleRepository($base);
+        $salles = $salleRepository->findAll();
+        require __DIR__ . '/../View/admin/afficherSalle.php';
+    }
+
+    public static function ajouterSalle(){
+        require __DIR__ . '/../View/admin/addSalleForm.html';
+    }
+
+    public static function ajouterSalleBdd(){
+        $base = Repository::connect();
+        $salleRepository = new SalleRepository($base);
+        $salleRepository->save($_POST["numSalle"],$_POST["placeSalle"],$_POST["dispo"]);
+        return 0;
+    }
+
+    public static function deleteSalle(){
+        $base = Repository::connect();
+        $salleRepository = new SalleRepository($base);
+        $salle = $salleRepository->delete($_POST["id"]);
+
+        if($salle){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function modifierSalle(){
+        require __DIR__ . '/../View/admin/modifierSalleForm.html';
+    }
+
+    public static function modiferSalleBdd(){
+        $base = Repository::connect();
+        $salleRepository = new SalleRepository($base);
+        $salleRepository->modifyById($_POST["id"],$_POST["dispo"],$_POST["numSalle"],$_POST["nbPlace"]);
+        return $salleRepository;
+    }
+
+    public static function afficherCreneau(){
+        $base = Repository::connect();
+        $creneauRepository = new CreneauRepository($base);
+        $creneaux = $creneauRepository->findAll();
+        require __DIR__ . '/../View/admin/afficherCreneau.php';
+    }
+
+    public static function modifierCreneau(){
+        require __DIR__ . '/../View/admin/modifierCreneauForm.html';
+    }
+
+    public static function modiferCreneauBdd(){
+        $base = Repository::connect();
+        $creneauRepository = new CreneauRepository($base);
+        $creneauRepository->modifyById($_POST["id"],$_POST["heureDebut"]);
+        return $creneauRepository;
+    }
+
+
+
+
+
+
     public static function erreur404()
     {
         header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
@@ -257,7 +421,6 @@ class  DefaultController
         require __DIR__ . '/../View/alertMessage.php';
     }
 
-
     public static function redirectionAuto($lien, $nomPage, $dureeEnSecondeAvantRedirection)
     {
         require __DIR__ . '/../View/redirection_auto.php';
@@ -270,10 +433,7 @@ class  DefaultController
             //envoi d'un message
             self::alertMessage("success", "Password hashed:<br><small>".password_hash($_POST["mdp"], PASSWORD_ARGON2I)."</small>");
         }
-
     }
-
-
 
     public static function generer_token($nom = '')
     {

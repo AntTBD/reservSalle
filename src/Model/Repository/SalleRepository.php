@@ -69,4 +69,36 @@ class SalleRepository
 
         return false;
     }
+
+    public function save($numSalle,$placeSalle,$dispo)
+    {
+        $response = $this->base->prepare('INSERT INTO salle (numSalle, nbPlaces, dispo) VALUES(:numSalle, :placeSalle, :dispo)');
+        $response->bindValue(':numSalle', $numSalle);
+        $response->bindValue(':placeSalle', $placeSalle);
+        $response->bindValue(':dispo', $dispo);
+
+        $response->execute();
+    }
+
+    public function modifyById($id,$dispo,$numSalle,$nbPlaces){
+        $response = $this->base->prepare('UPDATE salle SET dispo = :dispo, numSalle = :numSalle, nbPlaces = :nbPlaces WHERE id = :id');
+        $response->bindValue(':id', $id);
+        $response->bindValue(':dispo', $dispo);
+        $response->bindValue(':numSalle', $numSalle);
+        $response->bindValue(':nbPlaces', $nbPlaces);
+        return $response->execute();
+    }
+
+    public function delete($id)
+    {
+        $response = $this->base->prepare('DELETE FROM salle  WHERE id = :id;');
+        $response->bindValue(':id', $id);
+
+        $response->execute();
+        if($response->rowcount()==null) {
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

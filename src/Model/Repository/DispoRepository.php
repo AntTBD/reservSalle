@@ -14,12 +14,12 @@ class DispoRepository
         $this->base = $base;
     }
 
-    public function add(Dispo $dispo)
+    public function add($jour,$idSalle,$idCreneau)
     {
         $response = $this->base->prepare('INSERT INTO dispo (jour, idSalle, idCreneau) VALUES(:jour, :idSalle, :idCreneau)');
-        $response->bindValue(':jour', $dispo->getDate());
-        $response->bindValue(':idSalle', $dispo->getIdSalle());
-        $response->bindValue(':idCreneau', $dispo->getIdCreneau());
+        $response->bindValue(':jour', $jour);
+        $response->bindValue(':idSalle', $idSalle);
+        $response->bindValue(':idCreneau', $idCreneau);
 
         $response->execute();
         if($response == true){
@@ -77,4 +77,5 @@ class DispoRepository
         $reponse->bindValue(':idCreneau',$idCreneau);
         return $resultats = $reponse->execute();
     }
+
 }
