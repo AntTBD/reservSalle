@@ -210,7 +210,7 @@ class  DefaultController
                         ]);
                         $verifFindDispo = $dispoRepository->findByAll($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
                         if($verifFindDispo == false) {//si il n'y a pas de dispo on en crée une puisque qu'on vient de liberer une place
-                            $verifAddDispo = $dispoRepository->add($dispo_temp);
+                            $verifAddDispo = $dispoRepository->add($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
                             if ($verifAddDispo == true) {
                                 //envoi d'un message
                                 DefaultController::alertMessage("success", "La réservation a bien été supprimée.");
