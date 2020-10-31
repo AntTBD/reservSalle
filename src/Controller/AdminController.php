@@ -178,6 +178,9 @@ class AdminController
             //to get all salles
             $salleRepository = new SalleRepository($base);
             $salles = $salleRepository->findAll();
+            usort($salles, function($a, $b) {
+                return $a->getNumSalle() - $b->getNumSalle();
+            });// tri croissant des salles
             //to get all creneaux
             $creneauRepository = new CreneauRepository($base);
             $creneaux = $creneauRepository->findAll();
