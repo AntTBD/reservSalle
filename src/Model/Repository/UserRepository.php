@@ -110,6 +110,19 @@ class UserRepository
 
     }
 
+    public function modifyByIdWithMdp($id,$email,$admin, $mdp){
+        if($email != 0 || $email != false ) {
+
+            $response = $this->base->prepare('UPDATE user SET admin = :admin, email = :email, mdp = :mdp WHERE id = :id');
+            $response->bindValue(':id', $id);
+            $response->bindValue(':admin', $admin);
+            $response->bindValue(':email', $email);
+            $response->bindValue(':mdp', $mdp);
+            return $response->execute();
+        }
+
+    }
+
     public function findAll()
     {
         $listUsers=array();

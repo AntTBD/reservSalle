@@ -179,10 +179,22 @@ class  DefaultController
             $reservationRepository = new ReservationRepository($base);
             $mesResa = $reservationRepository->findAllByIdUser($_SESSION['id']);
             if (count($mesResa) > 0) {
+
                 //affichage de salles
                 $salleRepository = new SalleRepository($base);
                 //affichages creneaux
                 $creneauRepository = new CreneauRepository($base);
+
+                // tri croissant de mesResas
+                usort($mesResa, function($a, $b) use($salleRepository, $creneauRepository) {
+                    $val = strtotime($a->getJour()) - strtotime($b->getJour());
+                    if($val==0){
+                        $val = $creneauRepository->find($a->getIdCreneau())->getId() - $salleRepository->find($b->getIdCreneau())->getId();
+                    }
+                    return $val;
+                });// tri croissant de mesResas
+
+
                 require __DIR__ . '/../View/MesReservations/tableMesResa.php';
             } else {
                 //envoi d'un message

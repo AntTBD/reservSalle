@@ -102,7 +102,11 @@ class AdminController
             if (isset($_POST["id"]) && isset($_POST["email"]) && isset($_POST["admin"])) {
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
-                $userRepository->modifyById($_POST["id"], $_POST["email"], $_POST["admin"]);
+                if(isset($_POST['mdp'])) {
+                    $userRepository->modifyByIdWithMdp($_POST["id"], $_POST["email"], $_POST["admin"], password_hash($_POST["mdp"], PASSWORD_ARGON2I));
+                }else{
+                    $userRepository->modifyById($_POST["id"], $_POST["email"], $_POST["admin"]);
+                }
                 return $userRepository;
             }
         }
