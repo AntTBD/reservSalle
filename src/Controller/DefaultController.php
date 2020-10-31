@@ -303,10 +303,14 @@ class  DefaultController
         if (isset($_SESSION[$nom . '_token']) && isset($_SESSION[$nom . '_token_time']) && isset($_POST['token'])) {
             if ($_SESSION[$nom . '_token'] == $_POST['token']) {
                 if ($_SESSION[$nom . '_token_time'] >= (time() - $temps)) {
+                    unset($_SESSION[$nom . '_token']);
+                    unset($_SESSION[$nom . '_token_time']);
                     return true;
                 }
             }
         }
+        unset($_SESSION[$nom . '_token']);
+        unset($_SESSION[$nom . '_token_time']);
         return false;
     }
 
