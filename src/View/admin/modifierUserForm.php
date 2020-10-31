@@ -18,7 +18,7 @@
         <div class="col">
             <label for="mdp">Mot de passe</label>
             <input type="password" class="form-control" placeholder="<?php if(isset($user)){ echo "Laisser vide pour ne pas le modifier !"; }else{ echo "Mot de passe "; } ?>" id="mdp">
-            <small>Penser a crypter le mot de passe!</small>
+            <small>Utilisez un mot de passe avec seulement des chiffres !</small>
         </div>
     </div>
 </form>
