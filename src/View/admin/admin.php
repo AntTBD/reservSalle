@@ -22,6 +22,8 @@
               </tr>
               </tbody>
           </table>
+          <div id="resultAjax">
+          </div>
       </div>
       <div class="col-9" id="tableAdmin">
 

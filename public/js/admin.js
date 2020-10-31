@@ -81,9 +81,10 @@ function modifUser(idUser) {
                         url         :   '/index.php/modiferUserBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+$addmdp,
+                        data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+$addmdp +"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherUser();
                         },
                         error : function(){
@@ -116,9 +117,10 @@ function ajouterUser() {
                         url         :   '/index.php/ajouterUserBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+"&mdp="+$("#mdp").val(),
+                        data        :   "email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+"&mdp="+$("#mdp").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherUser();
                         },
                         error : function(){
@@ -152,22 +154,43 @@ function afficherDispo() {
 
 function deleteDispoVerif(idSalle,idCreneau) {
     openModal("Alerte");
-    $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette disponibilité ?");
-    $('#modalAction').html("Supprimer");
-    var idS = idSalle; var idC = idCreneau;
-    $('#modalAction').click(function (idS,idC) {
-        closeModal();
-        supprimerDispo(idSalle,idCreneau);
+    $.ajax({
+        url: '/index.php/deleteDispoVerif',
+        type: 'POST',
+        cache: false,
+        data: false,
+        success: function (result) {
+            let $input = '' +
+                '<div class="form-group  ">\n' +
+                '     <label for="token">Token CSRF</label>\n' +
+                '     <input type="" class="form-control" name="token" id="token" value="' + result + '" readonly >\n ' +
+                '</div>';
+            $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette disponibilité ?<br>" + $input);
+            $('#modalAction').html("Supprimer");
+            var idS = idSalle;
+            var idC = idCreneau;
+            $('#modalAction').click(function (idS, idC) {
+                closeModal();
+                alert($("#token").val());
+                supprimerDispo(idSalle, idCreneau);
+            });
+        },
+        error : function(){
+            alert("error");
+        }
     });
+
 }
+
 
 function supprimerDispo(idSalle,idCreneau) {
     $.ajax({
         url         :   '/index.php/deleteDispo',
         type        :   'POST',
         cache		: 	false,
-        data        :   "idSalle="+idSalle+"&idCreneau="+idCreneau,
+        data        :   "idSalle="+idSalle+"&idCreneau="+idCreneau+"&token="+$("#token").val(),
         success 	: 	function(result) {
+            $("#resultAjax").html(result);
             afficherDispo();
         },
         error : function(){
@@ -191,9 +214,10 @@ function ajouterDispo() {
                         url         :   '/index.php/ajouterDispoBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "jour="+$("#jour").val()+"&idSalle="+$("#idSalle").val()+"&idCreneau="+$("#idCreneau").val(),
+                        data        :   "jour="+$("#jour").val()+"&idSalle="+$("#idSalle").val()+"&idCreneau="+$("#idCreneau").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherDispo();
                         },
                         error : function(){
@@ -240,9 +264,10 @@ function ajouterSalle() {
                         url         :   '/index.php/ajouterSalleBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "numSalle="+$("#numSalle").val()+"&nbPlace="+$("#nbPlace").val()+"&dispo="+($("#dispo").is(":checked")? "1":"0"),
+                        data        :   "numSalle="+$("#numSalle").val()+"&nbPlace="+$("#nbPlace").val()+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherSalles();
                         },
                         error : function(){
@@ -264,23 +289,39 @@ function ajouterSalle() {
 
 function deleteSalleVerif(idSalle) {
     openModal("Alerte");
-    $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette salle ?");
-    $('#modalAction').html("Supprimer");
-    var id = idSalle;
-    $('#modalAction').click(function (id) {
-        var id = idSalle;
-        closeModal();
-        supprimerSalle(idSalle);
+    $.ajax({
+        url         :   '/index.php/deleteSalleVerif',
+        type        :   'POST',
+        cache        :     false,
+        data        :   false,
+        success     :     function(result) {
+            let $input = '' +
+                '<div class="form-group  d-none ">\n'+
+                '     <label for="token">Token CSRF</label>\n' +
+                '     <input type="hidden" class="form-control" name="token" id="token" value="'+result+'" readonly >\n ' +
+                '</div>';
+            $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette salle ?<br>"+$input);
+            $('#modalAction').html("Supprimer");
+            $('#modalAction').click(function (id) {
+                closeModal();
+                supprimerSalle(idSalle);
+            });
+        },
+        error : function(){
+            alert("error");
+        }
     });
+
 }
 
 function supprimerSalle(id) {
     $.ajax({
         url         :   '/index.php/deleteSalle',
         type        :   'POST',
-        cache		: 	false,
-        data        :   "id="+id,
-        success 	: 	function(result) {
+        cache        :     false,
+        data        :   "id="+id+"&token="+$("#token").val(),
+        success     :     function(result) {
+            $("#resultAjax").html(result);
             afficherSalles();
         },
         error : function(){
@@ -304,9 +345,10 @@ function modifSalle(idSalle) {
                         url         :   '/index.php/modiferSalleBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idSalle+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&nbPlace="+$("#nbPlace").val()+"&numSalle="+$("#numSalle").val(),
+                        data        :   "id="+idSalle+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&nbPlace="+$("#nbPlace").val()+"&numSalle="+$("#numSalle").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherSalles();
                         },
                         error : function(){
@@ -356,9 +398,10 @@ function modifCreneau(idCreneau) {
                         url         :   '/index.php/modiferCreneauBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idCreneau+"&heureDebut="+$("#heureDebut").val(),
+                        data        :   "id="+idCreneau+"&heureDebut="+$("#heureDebut").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
+                            $("#resultAjax").html(result);
                             afficherCreneau();
                         },
                         error : function(){

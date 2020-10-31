@@ -67,6 +67,8 @@ if ('/index.php' == $uri || '/' == $uri) {
     AdminController::afficherDispo();
 } elseif ('/index.php/deleteDispo' == $uri) {
     AdminController::deleteDispo();
+} elseif ('/index.php/deleteDispoVerif' == $uri) {
+    AdminController::deleteDispoVerif();
 } elseif ('/index.php/ajouterDispo' == $uri) {
     AdminController::ajouterDispo();
 } elseif ('/index.php/ajouterDispoBdd' == $uri) {
@@ -79,6 +81,8 @@ if ('/index.php' == $uri || '/' == $uri) {
     AdminController::ajouterSalleBdd();
 } elseif ('/index.php/deleteSalle' == $uri) {
     AdminController::deleteSalle();
+} elseif ('/index.php/deleteSalleVerif' == $uri) {
+    AdminController::deleteSalleVerif();
 } elseif ('/index.php/modifierSalle' == $uri) {
     AdminController::modifierSalle();
 } elseif ('/index.php/modiferSalleBdd' == $uri) {

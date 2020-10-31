@@ -20,4 +20,8 @@
             <small>Si une salle est disponible, elle peut-être réservée par des éléves.</small>
         </div>
     </div>
+    <div class="form-group d-none">
+        <label for="token">Token CSRF</label>
+        <input type="hidden" class="form-control" name="token" id="token" value="<?php  if(isset($token)){ echo $token;} //Le champ caché a pour valeur le jeton  ?>" readonly>
+    </div>
 </form>

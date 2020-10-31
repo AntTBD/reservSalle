@@ -27,6 +27,10 @@
                 <?php } ?>
             </select>
         </div>
+        <div class="form-group d-none">
+            <label for="token">Token CSRF</label>
+            <input type="hidden" class="form-control" name="token" id="token" value="<?php  if(isset($token)){ echo $token;} //Le champ caché a pour valeur le jeton  ?>" readonly>
+        </div>
     </div>
 </form>
 

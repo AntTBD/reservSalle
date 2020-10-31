@@ -33,7 +33,7 @@ class AdminController
 
     public static function admin()
     {
-        if (self::isAdmin()){
+        if (self::isAdmin()) {
             $base = Repository::connect();
             //affichage de salles
             $salleRepository = new SalleRepository($base);
@@ -56,7 +56,7 @@ class AdminController
 
     public static function afficherUser()
     {
-        if (self::isAdmin()){
+        if (self::isAdmin()) {
             $base = Repository::connect();
             $userRepository = new UserRepository($base);
             $users = $userRepository->findAll();
@@ -85,6 +85,7 @@ class AdminController
     public static function modifierUser()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('modifier_user');
             if (isset($_POST["id"])) {
 
                 $base = Repository::connect();
@@ -99,15 +100,20 @@ class AdminController
     public static function modiferUserBdd()
     {
         if (self::isAdmin()) {
+            if (DefaultController::verifier_token(120, 'modifier_user')) {
             if (isset($_POST["id"]) && isset($_POST["email"]) && isset($_POST["admin"])) {
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
-                if(isset($_POST['mdp'])) {
+                if (isset($_POST['mdp'])) {
                     $userRepository->modifyByIdWithMdp($_POST["id"], $_POST["email"], $_POST["admin"], password_hash($_POST["mdp"], PASSWORD_ARGON2I));
-                }else{
+                } else {
                     $userRepository->modifyById($_POST["id"], $_POST["email"], $_POST["admin"]);
                 }
                 return $userRepository;
+            }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
             }
         }
     }
@@ -115,6 +121,7 @@ class AdminController
     public static function ajouterUser()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('ajouter_user');
             require __DIR__ . '/../View/admin/modifierUserForm.php';
         }
     }
@@ -122,11 +129,16 @@ class AdminController
     public static function ajouterUserBdd()
     {
         if (self::isAdmin()) {
+            if (DefaultController::verifier_token(120, 'ajouter_user')) {
             if (isset($_POST["email"]) && isset($_POST["mdp"]) && isset($_POST["admin"])) {
                 $base = Repository::connect();
                 $userRepository = new UserRepository($base);
                 $userRepository->save($_POST["email"], password_hash($_POST["mdp"], PASSWORD_ARGON2I), $_POST["admin"]);
                 return $userRepository;
+            }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
             }
         }
     }
@@ -143,11 +155,11 @@ class AdminController
             $creneauRepository = new CreneauRepository($base);
 
             // tri croissant des dispos
-            usort($dispos, function($a, $b) use($salleRepository, $creneauRepository) {
+            usort($dispos, function ($a, $b) use ($salleRepository, $creneauRepository) {
                 $val = strtotime($a->getDate()) - strtotime($b->getDate());
-                if($val==0){
+                if ($val == 0) {
                     $val = $salleRepository->find($a->getIdSalle())->getNumSalle() - $salleRepository->find($b->getIdSalle())->getNumSalle();
-                    if($val == 0){
+                    if ($val == 0) {
                         $val = $creneauRepository->find($a->getIdCreneau())->getId() - $salleRepository->find($b->getIdCreneau())->getId();
                     }
                 }
@@ -157,10 +169,18 @@ class AdminController
             require __DIR__ . '/../View/admin/afficherDispo.php';
         }
     }
-
+    public static function deleteDispoVerif()
+    {
+        if (self::isAdmin()) {
+            $token = DefaultController::generer_token('delete_dispo');
+            echo $token;
+        }
+    }
     public static function deleteDispo()
     {
         if (self::isAdmin()) {
+            echo $_POST["token"];
+            if (DefaultController::verifier_token(120, 'delete_dispo')) {
             if (isset($_POST["idSalle"]) && isset($_POST["idCreneau"])) {
                 $base = Repository::connect();
                 $dispoRepository = new DispoRepository($base);
@@ -172,17 +192,23 @@ class AdminController
                     return false;
                 }
             }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
+            }
         }
     }
+
 
     public static function ajouterDispo()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('ajouter_dispo');
             $base = Repository::connect();
             //to get all salles
             $salleRepository = new SalleRepository($base);
             $salles = $salleRepository->findAll();
-            usort($salles, function($a, $b) {
+            usort($salles, function ($a, $b) {
                 return $a->getNumSalle() - $b->getNumSalle();
             });// tri croissant des salles
             //to get all creneaux
@@ -195,13 +221,18 @@ class AdminController
     public static function ajouterDispoBdd()
     {
         if (self::isAdmin()) {
+            if (DefaultController::verifier_token(120, 'ajouter_dispo')) {
             if (isset($_POST["jour"]) && isset($_POST["idSalle"]) && isset($_POST["idCreneau"])) {
                 $base = Repository::connect();
                 $dispoRepository = new DispoRepository($base);
                 $dispoDate = explode('/', $_POST["jour"]);
-                $dispoDateString = $dispoDate[0]."-".$dispoDate[1]."-".$dispoDate[2];
+                $dispoDateString = $dispoDate[0] . "-" . $dispoDate[1] . "-" . $dispoDate[2];
                 $dispoRepository->add($dispoDateString, $_POST["idSalle"], $_POST["idCreneau"]);
                 return $dispoRepository;
+            }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
             }
         }
     }
@@ -212,7 +243,7 @@ class AdminController
             $base = Repository::connect();
             $salleRepository = new SalleRepository($base);
             $salles = $salleRepository->findAll();
-            usort($salles, function($a, $b) {
+            usort($salles, function ($a, $b) {
                 return $a->getNumSalle() - $b->getNumSalle();
             });// tri croissant des salles
             require __DIR__ . '/../View/admin/afficherSalle.php';
@@ -222,6 +253,7 @@ class AdminController
     public static function ajouterSalle()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('ajouter_salle');
             require __DIR__ . '/../View/admin/modifierSalleForm.php';
         }
     }
@@ -229,18 +261,31 @@ class AdminController
     public static function ajouterSalleBdd()
     {
         if (self::isAdmin()) {
+            if (DefaultController::verifier_token(120, 'ajouter_salle')) {
             if (isset($_POST["numSalle"]) && isset($_POST["nbPlace"]) && isset($_POST["dispo"])) {
                 $base = Repository::connect();
                 $salleRepository = new SalleRepository($base);
                 $salleRepository->save($_POST["numSalle"], $_POST["nbPlace"], $_POST["dispo"]);
                 return 0;
             }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
+            }
         }
     }
 
+    public static function deleteSalleVerif()
+    {
+        if (self::isAdmin()) {
+            $token = DefaultController::generer_token('delete_salle');
+            echo $token;
+        }
+    }
     public static function deleteSalle()
     {
         if (self::isAdmin()) {
+            if (DefaultController::verifier_token(120, 'delete_salle')) {
             if (isset($_POST["id"])) {
                 $base = Repository::connect();
                 $salleRepository = new SalleRepository($base);
@@ -252,12 +297,17 @@ class AdminController
                     return false;
                 }
             }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
+            }
         }
     }
 
     public static function modifierSalle()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('modif_salle');
             if (isset($_POST["id"])) {
 
                 $base = Repository::connect();
@@ -271,13 +321,19 @@ class AdminController
     public static function modiferSalleBdd()
     {
         if (self::isAdmin()) {
-            if (isset($_POST["id"]) && isset($_POST["dispo"]) && isset($_POST["numSalle"]) && isset($_POST["nbPlace"])) {
-                $base = Repository::connect();
-                $salleRepository = new SalleRepository($base);
-                $salleRepository->modifyById($_POST["id"], $_POST["dispo"], $_POST["numSalle"], $_POST["nbPlace"]);
-                return $salleRepository;
+            if (DefaultController::verifier_token(120, 'modif_salle')) {
+                if (isset($_POST["id"]) && isset($_POST["dispo"]) && isset($_POST["numSalle"]) && isset($_POST["nbPlace"])) {
+                    $base = Repository::connect();
+                    $salleRepository = new SalleRepository($base);
+                    $salleRepository->modifyById($_POST["id"], $_POST["dispo"], $_POST["numSalle"], $_POST["nbPlace"]);
+                    return $salleRepository;
+                }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
             }
         }
+
     }
 
     public static function afficherCreneau()
@@ -293,6 +349,7 @@ class AdminController
     public static function modifierCreneau()
     {
         if (self::isAdmin()) {
+            $token = DefaultController::generer_token('modif_creneau');
             if (isset($_POST["id"])) {
                 $base = Repository::connect();
                 $creneauRepository = new CreneauRepository($base);
@@ -300,16 +357,22 @@ class AdminController
                 require __DIR__ . '/../View/admin/modifierCreneauForm.php';
             }
         }
+
     }
 
     public static function modiferCreneauBdd()
     {
         if (self::isAdmin()) {
-            if (isset($_POST["id"]) && isset($_POST["heureDebut"])) {
-                $base = Repository::connect();
-                $creneauRepository = new CreneauRepository($base);
-                $creneauRepository->modifyById($_POST["id"], $_POST["heureDebut"]);
-                return $creneauRepository;
+            if (DefaultController::verifier_token(120, 'modif_creneau')) {
+                if (isset($_POST["id"]) && isset($_POST["heureDebut"])) {
+                    $base = Repository::connect();
+                    $creneauRepository = new CreneauRepository($base);
+                    $creneauRepository->modifyById($_POST["id"], $_POST["heureDebut"]);
+                    return $creneauRepository;
+                }
+            } else {
+                //envoi d'un message
+                DefaultController::alertMessage("danger", "Mauvais Token");
             }
         }
     }
