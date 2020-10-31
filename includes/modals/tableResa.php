@@ -1,4 +1,5 @@
 <?php $date = $_POST["date"]; //String contenant la date selectionné?>
+
 <input id="date" value="<?php echo $date?>" hidden>
 <style>
     #table_resa th:first-child
@@ -42,17 +43,17 @@
             if($salleValid == 1){               //La salle est dispo
                 $verif = $resas->verifDispoSalle($salle->getNbPlaces(),$salle->getId(),$creneau->getId(),$date,$_SESSION["id"]);
                 if($verif == 2){
-                    echo "<td>disponible   <button type='button' class='btn btn-warning' >Déja réserver</button></td>";
+                    echo "<td>Disponible<br><button type='button' class='btn btn-warning' >Déja réserver</button></td>";
                 }elseif($verif == 1 ){                //Il reste des places ! on peut reserver
                     $idSalle = $salle->getId();
                     $idCreneau = $creneau->getId();
                     $idUser = $_SESSION["id"];
-                    echo "<td>Disponible   <button type='button' class='btn btn-success' onclick='reservation($idSalle,$idCreneau,$idUser)'>Réserver</button></td>";
+                    echo "<td>Disponible<br><button type='button' class='btn btn-success' onclick='reservation($idSalle,$idCreneau,$idUser)'>Réserver</button></td>";
                 }else{                          //Aucune place dispo on ne peux pas reserver
-                    echo "<td>Creneau indisponible <button type='button' class='btn btn-secondary' disabled>Réserver</button></td>";
+                    echo "<td><span style='color: red'>Creneau indisponible</span><br><button type='button' class='btn btn-secondary' disabled>Réserver</button></td>";
                 }
             }else{
-                echo "<td>Salle indisponible <button type='button' class='btn btn-secondary' disabled>Réserver</button></td>";
+                echo "<td>Salle indisponible<br><button type='button' class='btn btn-secondary' disabled>Réserver</button></td>";
             }
 
 

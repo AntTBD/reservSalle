@@ -12,10 +12,10 @@
 
     <?php foreach ($mesResa as $resa) { ?>
 
-        <tr>
+        <tr <?php if($resa->getJour() == date('Y-m-d', strtotime("Today"))) echo "class='table-info'"; ?>>
             <th scope="row"><?= $salleRepository->findById($resa->getIdSalle())->getNumSalle() ?></th>
             <td><?= $resa->getJour() ?></td>
-            <td><?= $creneauRepository->findById($resa->getIdCreneau())->getHeureDebut() ?></td>
+            <td><?= $creneauRepository->find($resa->getIdCreneau())->getHeureDebut() ?></td>
             <td>
                 <button type='button' class='btn btn-danger' onclick="annulerUnReservation(<?= $resa->getId() ?>)">Annuler</button>
             </td>

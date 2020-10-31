@@ -7,17 +7,17 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            Choisissez un jour :
+            <label for="selectDate">Choisissez un jour :</label>
         </div>
         <div class="col-sm">
             <select class="custom-select mr-sm-2" id="selectDate" onchange="afficherResa()">
                 <option value="<?php date('Y/m/d', strtotime("Today")) ?>">Choisir une date</option>
                 <?php $startdate=strtotime("Today");
                 $enddate=strtotime("+3 weeks", $startdate);
-                while ($startdate < $enddate) {
-                    $startdate = strtotime("+1 day", $startdate); ?>
+                while ($startdate < $enddate) { ?>
                     <option value="<?php echo date("Y/m/d",$startdate); ?>"> <?php echo date("Y/m/d",$startdate); ?></option>
-                <?php } ?>
+                <?php $startdate = strtotime("+1 day", $startdate);
+                } ?>
 
             </select>
         </div>

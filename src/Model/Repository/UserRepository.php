@@ -92,21 +92,21 @@ class UserRepository
 
     public function delete($id)
     {
-        $response = $this->base->prepare('DELETE FROM user  WHERE id = :id;');
+        $response = $this->base->prepare('DELETE FROM user WHERE id = :id;');
         $response->bindValue(':id', $id);
         return $response->execute();
 
     }
 
     public function modifyById($id,$email,$admin){
-        if($email != 0 || $email != false ){
+        if($email != 0 || $email != false ) {
 
+            $response = $this->base->prepare('UPDATE user SET admin = :admin, email = :email WHERE id = :id');
+            $response->bindValue(':id', $id);
+            $response->bindValue(':admin', $admin);
+            $response->bindValue(':email', $email);
+            return $response->execute();
         }
-        $response = $this->base->prepare('UPDATE user SET admin = :admin, email = :email WHERE id = :id');
-        $response->bindValue(':id', $id);
-        $response->bindValue(':admin', $admin);
-        $response->bindValue(':email', $email);
-        return $response->execute();
 
     }
 

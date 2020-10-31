@@ -1,9 +1,30 @@
+function closeModal(){
+    $('#modal').modal('hide');
+
+    $( "#modalAction" ).off( "click");// remove click event
+    $('#modalTitle').html("__Titre__");
+    $('#modalBody').html("__Message__");
+    $('#modalAction').html("__Action__");
+}
+
+//-----------------------------------------------------------------------------------------------
+
+function openModal($titre){
+    $( "#modalAction" ).off( "click");// remove click event pour etre sur
+    $('#modalTitle').html("__Titre__");
+    $('#modalBody').html("__Message__");
+    $('#modalAction').html("__Action__");
+
+    $('#modalTitle').html($titre);
+    $('#modal').modal('show');
+}
+
 function afficherUser() {
     $.ajax({
         url         :   '/index.php/afficherUser',
         type        :   'POST',
         cache		: 	false,
-        //data        :   "date="+$("#selectDate").val(),
+        data        :   false,
         success 	: 	function(result) {
             $('#tableAdmin').html(result);
         },
@@ -14,12 +35,12 @@ function afficherUser() {
 }
 
 function deleteVerif(idUser) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Alerte");
+    openModal("Alert");
     $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette utilisateur ?");
-    $('#modalAction').html("supprimer");
-    var id = idUser;
+    $('#modalAction').html("Supprimer");
+    //var id = idUser;
     $('#modalAction').click(function (id) {
+        closeModal();
         supprimer(idUser);
     });
 }
@@ -40,9 +61,7 @@ function supprimer(idUser) {
 }
 
 function modifUser(idUser) {
-    var id = idUser;
-    $('#modal').modal('show');
-    $('#modalTitle').html("Modifier un utilisateur");
+    openModal("Modifier un Utilisateur");
     $.ajax({                                            //On affiche la modal de modification
         url         :   '/index.php/modifierUser',
         type        :   'POST',
@@ -50,24 +69,29 @@ function modifUser(idUser) {
         data        :   "id="+idUser,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("modifier");
+            $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {
-                if($("#email").val() != "" && $("#admin").val() != ""){
+                if($("#email").val() !== "" && $("#admin").val() !== ""){
+                    let $addmdp = "";
+                    if($("#mdp").val() !== ""){
+                        $addmdp="&mdp="+$("#mdp").val();
+                    }
+
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/modiferUserBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+$("#admin").val(),
+                        data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+$addmdp,
                         success 	: 	function(result) {
+                            closeModal();
                             afficherUser();
-                            $('#modal').modal('hide');
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez les deux champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },
@@ -77,33 +101,32 @@ function modifUser(idUser) {
     });
 }
 
-function ajouterUser(idUser) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Ajouter un utilisateur");
+function ajouterUser() {
+    openModal("Ajouter un Utilisateur");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterUser',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("ajouter");
+            $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
-                if($("#email").val() != "" && $("#admin").val() != "" && $("#mdp").val() != ""){
+                if($("#email").val() !== "" && $("#admin").val() !== "" && $("#mdp").val() !== ""){
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/ajouterUserBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+$("#admin").val()+"&mdp="+$("#mdp").val(),
+                        data        :   "email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+"&mdp="+$("#mdp").val(),
                         success 	: 	function(result) {
+                            closeModal();
                             afficherUser();
-                            $('#modal').modal('hide');
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez les deux champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },
@@ -128,12 +151,12 @@ function afficherDispo() {
 }
 
 function deleteDispoVerif(idSalle,idCreneau) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Alerte");
+    openModal("Alerte");
     $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette disponibilité ?");
-    $('#modalAction').html("supprimer");
+    $('#modalAction').html("Supprimer");
     var idS = idSalle; var idC = idCreneau;
     $('#modalAction').click(function (idS,idC) {
+        closeModal();
         supprimerDispo(idSalle,idCreneau);
     });
 }
@@ -154,32 +177,31 @@ function supprimerDispo(idSalle,idCreneau) {
 }
 
 function ajouterDispo() {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Ajouter une disponibilité");
+    openModal("Ajouter une disponibilité");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterDispo',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("ajouter");
+            $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
-                if($("#idSalle").val() != "" && $("#idCreneau").val() != "" && $("#jour").val() != ""){
+                if($("#idSalle").val() !== "" && $("#idCreneau").val() !== "" && $("#jour").val() !== ""){
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/ajouterDispoBdd',
                         type        :   'POST',
                         cache		: 	false,
                         data        :   "jour="+$("#jour").val()+"&idSalle="+$("#idSalle").val()+"&idCreneau="+$("#idCreneau").val(),
                         success 	: 	function(result) {
-                            afficherUser();
-                            $('#modal').modal('hide');
+                            closeModal();
+                            afficherDispo();
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez tous les champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },
@@ -204,32 +226,31 @@ function afficherSalles() {
 }
 
 function ajouterSalle() {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Ajouter une salle");
+    openModal("Ajouter une salle");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterSalle',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("ajouter");
+            $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
-                if($("#numSalle").val() != "" && $("#placeSalle").val() != "" && $("#dispo").val() != ""){
+                if($("#numSalle").val() !== "" && $("#nbPlace").val() !== "" && $("#dispo").val() !== ""){
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/ajouterSalleBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "numSalle="+$("#numSalle").val()+"&placeSalle="+$("#placeSalle").val()+"&dispo="+$("#dispo").val(),
+                        data        :   "numSalle="+$("#numSalle").val()+"&nbPlace="+$("#nbPlace").val()+"&dispo="+($("#dispo").is(":checked")? "1":"0"),
                         success 	: 	function(result) {
+                            closeModal();
                             afficherSalles();
-                            $('#modal').modal('hide');
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez bien les champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },
@@ -242,13 +263,13 @@ function ajouterSalle() {
 
 
 function deleteSalleVerif(idSalle) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Alerte");
+    openModal("Alerte");
     $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette salle ?");
-    $('#modalAction').html("supprimer");
+    $('#modalAction').html("Supprimer");
     var id = idSalle;
     $('#modalAction').click(function (id) {
         var id = idSalle;
+        closeModal();
         supprimerSalle(idSalle);
     });
 }
@@ -261,17 +282,14 @@ function supprimerSalle(id) {
         data        :   "id="+id,
         success 	: 	function(result) {
             afficherSalles();
-            $('#modal').modal('hide');
         },
         error : function(){
             alert("error");
         }
     });
 }
-
 function modifSalle(idSalle) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Modifier un utilisateur");
+    openModal("Modifier une salle");
     $.ajax({                                                //On affiche la modal de modification
         url         :   '/index.php/modifierSalle',
         type        :   'POST',
@@ -279,24 +297,24 @@ function modifSalle(idSalle) {
         data        :   "id="+idSalle,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("modifier");
+            $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {
-                if($("#dispo").val() != "" && $("#nbPlace").val() != "" && $("#numSalle") != ""){
+                if($("#dispo").val() !== "" && $("#nbPlace").val() !== "" && $("#numSalle") !== ""){
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/modiferSalleBdd',
                         type        :   'POST',
                         cache		: 	false,
-                        data        :   "id="+idSalle+"&dispo="+$("#dispo").val()+"&nbPlace="+$("#nbPlace").val()+"&numSalle="+$("#numSalle").val(),
+                        data        :   "id="+idSalle+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&nbPlace="+$("#nbPlace").val()+"&numSalle="+$("#numSalle").val(),
                         success 	: 	function(result) {
+                            closeModal();
                             afficherSalles();
-                            $('#modal').modal('hide');
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez les deux champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },
@@ -323,8 +341,7 @@ function afficherCreneau() {
 
 
 function modifCreneau(idCreneau) {
-    $('#modal').modal('show');
-    $('#modalTitle').html("Modifier un creneau");
+    openModal("Modifier un creneau");
     $.ajax({                                                //On affiche la modal de modification
         url         :   '/index.php/modifierCreneau',
         type        :   'POST',
@@ -332,24 +349,24 @@ function modifCreneau(idCreneau) {
         data        :   "id="+idCreneau,
         success 	: 	function(result) {
             $('#modalBody').html(result);
-            $('#modalAction').html("modifier");
+            $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {
-                if($("#heureDebut").val() != ""){
+                if($("#heureDebut").val() !== ""){
                     $.ajax({                                //On modifie en BDD
                         url         :   '/index.php/modiferCreneauBdd',
                         type        :   'POST',
                         cache		: 	false,
                         data        :   "id="+idCreneau+"&heureDebut="+$("#heureDebut").val(),
                         success 	: 	function(result) {
+                            closeModal();
                             afficherCreneau();
-                            $('#modal').modal('hide');
                         },
                         error : function(){
                             alert("error");
                         }
                     });
                 }else{
-                    alert("remplissez les deux champs");
+                    alert("Remplissez tous champs");
                 }
             });
         },

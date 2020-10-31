@@ -6,6 +6,7 @@
 session_start();
 require __DIR__.'/../vendor/autoload.php';
 
+use App\Controller\AdminController;
 use App\Controller\DefaultController;
 
 
@@ -31,9 +32,7 @@ if ('/index.php' == $uri || '/' == $uri) {
     DefaultController::reservation();
     require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/reservationBDD' == $uri) {
-    require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::reservationBDD();
-    require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/afficherReservation' == $uri) {
     DefaultController::afficherReservation();
 } elseif ('/index.php/mesreservations' == $uri) {
@@ -50,46 +49,46 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/admin' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
-    DefaultController::admin();
+    AdminController::admin();
     require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/afficherUser' == $uri) {
-    DefaultController::afficherUser();
+    AdminController::afficherUser();
 } elseif ('/index.php/deleteUser' == $uri) {
-    DefaultController::deleteUser();
+    AdminController::deleteUser();
 } elseif ('/index.php/modifierUser' == $uri) {
-    DefaultController::modifierUser();
+    AdminController::modifierUser();
 } elseif ('/index.php/modiferUserBdd' == $uri) {
-    DefaultController::modiferUserBdd();
+    AdminController::modiferUserBdd();
 } elseif ('/index.php/ajouterUser' == $uri) {
-    DefaultController::ajouterUser();
+    AdminController::ajouterUser();
 } elseif ('/index.php/ajouterUserBdd' == $uri) {
-    DefaultController::ajouterUserBdd();
+    AdminController::ajouterUserBdd();
 } elseif ('/index.php/afficherDispo' == $uri) {
-    DefaultController::afficherDispo();
+    AdminController::afficherDispo();
 } elseif ('/index.php/deleteDispo' == $uri) {
-    DefaultController::deleteDispo();
+    AdminController::deleteDispo();
 } elseif ('/index.php/ajouterDispo' == $uri) {
-    DefaultController::ajouterDispo();
+    AdminController::ajouterDispo();
 } elseif ('/index.php/ajouterDispoBdd' == $uri) {
-    DefaultController::ajouterDispoBdd();
+    AdminController::ajouterDispoBdd();
 } elseif ('/index.php/afficherSalles' == $uri) {
-    DefaultController::afficherSalles();
+    AdminController::afficherSalles();
 } elseif ('/index.php/ajouterSalle' == $uri) {
-    DefaultController::ajouterSalle();
+    AdminController::ajouterSalle();
 } elseif ('/index.php/ajouterSalleBdd' == $uri) {
-    DefaultController::ajouterSalleBdd();
+    AdminController::ajouterSalleBdd();
 } elseif ('/index.php/deleteSalle' == $uri) {
-    DefaultController::deleteSalle();
+    AdminController::deleteSalle();
 } elseif ('/index.php/modifierSalle' == $uri) {
-    DefaultController::modifierSalle();
+    AdminController::modifierSalle();
 } elseif ('/index.php/modiferSalleBdd' == $uri) {
-    DefaultController::modiferSalleBdd();
+    AdminController::modiferSalleBdd();
 }  elseif ('/index.php/afficherCreneau' == $uri) {
-    DefaultController::afficherCreneau();
+    AdminController::afficherCreneau();
 } elseif ('/index.php/modifierCreneau' == $uri) {
-    DefaultController::modifierCreneau();
+    AdminController::modifierCreneau();
 } elseif ('/index.php/modiferCreneauBdd' == $uri) {
-    DefaultController::modiferCreneauBdd();
+    AdminController::modiferCreneauBdd();
 } else {
     require __DIR__ . '/../src/View/Commons/header.php';
     DefaultController::erreur404();

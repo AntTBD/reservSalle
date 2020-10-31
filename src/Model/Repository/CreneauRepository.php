@@ -47,7 +47,7 @@ class CreneauRepository
         return false;
     }
 
-    public function findById($id)
+    public function find($id)
     {
         $response = $this->base->prepare('SELECT * FROM creneau WHERE id = :id');
         $response->bindValue(':id', $id);

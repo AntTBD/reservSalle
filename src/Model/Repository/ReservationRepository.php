@@ -71,8 +71,7 @@ class ReservationRepository
     }
 
     public function verifDispoSalle($nbPlaces,$idSalle,$idCreneau,$date,$idUser){
-        $reservationRepository = new ReservationRepository($this->base);
-        $resas = $reservationRepository->findAll();
+        $resas = self::findAll();
         $dejaReserv = false;
         $compteur = 0;
         foreach ($resas as $resa){
@@ -80,7 +79,7 @@ class ReservationRepository
             $resaDate = explode('-', $resa->getJour());
             $resaDateString = $resaDate[0]."/".$resaDate[1]."/".$resaDate[2];
 
-            if($resa->getIdSalle() == $idSalle && $resa->getIdCreneau() == $idCreneau && $resaDateString == $date){
+            if($resaDateString == $date && $resa->getIdCreneau() == $idCreneau && $resa->getIdSalle() == $idSalle ){
                 if($resa->getIdUser() == $idUser){
                     $dejaReserv = true;
                 }
@@ -92,7 +91,7 @@ class ReservationRepository
 
         if( $dejaReserv == true){
             return 2;
-        }elseif ($compteur <= $nbPlaces)
+        }elseif ($compteur < $nbPlaces)
         {
             return 1;
         }else{

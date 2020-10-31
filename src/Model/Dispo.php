@@ -5,7 +5,7 @@ namespace App\Model;
 class Dispo
 {
 
-    private $date;
+    private $jour;
 
     private $idCreneau;
 
@@ -14,12 +14,12 @@ class Dispo
     // date
     public function getDate()
     {
-        return $this->date;
+        return $this->jour;
     }
 
     public function setId($date)
     {
-        $this->date = $date;
+        $this->jour = $date;
     }
 
     public function load($date,$idSalle,$idCreneau){

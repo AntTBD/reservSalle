@@ -34,8 +34,8 @@ class DispoRepository
         $reponse = $this->base->prepare('SELECT * FROM dispo;');
         $resultats = $reponse->execute();
         if($resultats==true){
-            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
-            return $listSalle;
+            $listDispo=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
+            return $listDispo;
         }
         return false;
     }
@@ -49,8 +49,8 @@ class DispoRepository
         $resultats = $reponse->execute();
 
         if($resultats==true){
-            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
-            return $listSalle;
+            $listDispo=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
+            return $listDispo;
         }
 
         return false;
@@ -64,8 +64,8 @@ class DispoRepository
         $resultats = $reponse->execute();
 
         if($resultats==true){
-            $listSalle=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
-            return $listSalle;
+            $listDispo=$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Dispo');
+            return $listDispo;
         }
 
         return false;

@@ -4,7 +4,7 @@
           <table class="table table-striped">
               <thead>
               <tr>
-                  <th scope="col">Actions réaliser en tant qu'administrateur:</th>
+                  <th scope="col">Actions à réaliser en tant qu'administrateur:</th>
               </tr>
               </thead>
               <tbody>
@@ -15,7 +15,7 @@
                   <th scope="row"><button type="button" class="btn btn-light" onclick="afficherDispo()">Gérer les disponibilité des salles</button></th>
               </tr>
               <tr>
-                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherSalles()">Ajouter/Supprimer salle</button></th>
+                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherSalles()">Ajouter/Supprimer salles</button></th>
               </tr>
               <tr>
                   <th scope="row"><button type="button" class="btn btn-light" onclick="afficherCreneau()">Ajouter/Supprimer crénaux</button></th>
