@@ -179,7 +179,6 @@ class AdminController
     public static function deleteDispo()
     {
         if (self::isAdmin()) {
-            echo $_POST["token"];
             if (DefaultController::verifier_token(120, 'delete_dispo')) {
             if (isset($_POST["idSalle"]) && isset($_POST["idCreneau"])) {
                 $base = Repository::connect();

@@ -167,12 +167,9 @@ function deleteDispoVerif(idSalle,idCreneau) {
                 '</div>';
             $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette disponibilité ?<br>" + $input);
             $('#modalAction').html("Supprimer");
-            var idS = idSalle;
-            var idC = idCreneau;
-            $('#modalAction').click(function (idS, idC) {
-                closeModal();
-                alert($("#token").val());
+            $('#modalAction').click(function (idS,idC) {
                 supprimerDispo(idSalle, idCreneau);
+                closeModal();
             });
         },
         error : function(){
@@ -303,8 +300,8 @@ function deleteSalleVerif(idSalle) {
             $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette salle ?<br>"+$input);
             $('#modalAction').html("Supprimer");
             $('#modalAction').click(function (id) {
-                closeModal();
                 supprimerSalle(idSalle);
+                closeModal();
             });
         },
         error : function(){
