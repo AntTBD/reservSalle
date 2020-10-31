@@ -55,6 +55,8 @@ if ('/index.php' == $uri || '/' == $uri) {
     AdminController::afficherUser();
 } elseif ('/index.php/deleteUser' == $uri) {
     AdminController::deleteUser();
+} elseif ('/index.php/deleteUserVerif' == $uri) {
+    AdminController::deleteUserVerif();
 } elseif ('/index.php/modifierUser' == $uri) {
     AdminController::modifierUser();
 } elseif ('/index.php/modiferUserBdd' == $uri) {

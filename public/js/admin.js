@@ -1,6 +1,5 @@
 function closeModal(){
     $('#modal').modal('hide');
-
     $( "#modalAction" ).off( "click");// remove click event
     $('#modalTitle').html("__Titre__");
     $('#modalBody').html("__Message__");
@@ -36,12 +35,27 @@ function afficherUser() {
 
 function deleteVerif(idUser) {
     openModal("Alert");
-    $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette utilisateur ?");
-    $('#modalAction').html("Supprimer");
-    //var id = idUser;
-    $('#modalAction').click(function (id) {
-        closeModal();
-        supprimer(idUser);
+    $.ajax({
+        url: '/index.php/deleteUserVerif',
+        type: 'POST',
+        cache: false,
+        data: false,
+        success: function (result) {
+            let $input = '' +
+                '<div class="form-group d-none ">\n' +
+                '     <label for="token">Token CSRF</label>\n' +
+                '     <input type="hidden" class="form-control" name="token" id="token" value="' + result + '" readonly >\n ' +
+                '</div>';
+            $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette utilisateur ?<br>" + $input);
+            $('#modalAction').html("Supprimer");
+            $('#modalAction').click(function (id) {
+                supprimer(idUser);
+                closeModal();
+            });
+        },
+        error : function(){
+            alert("error");
+        }
     });
 }
 
@@ -50,8 +64,9 @@ function supprimer(idUser) {
         url         :   '/index.php/deleteUser',
         type        :   'POST',
         cache		: 	false,
-        data        :   "id="+idUser,
+        data        :   "id="+idUser +"&token="+$("#token").val(),
         success 	: 	function(result) {
+            $("#resultAjax").html(result);
             afficherUser();
         },
         error : function(){
@@ -161,9 +176,9 @@ function deleteDispoVerif(idSalle,idCreneau) {
         data: false,
         success: function (result) {
             let $input = '' +
-                '<div class="form-group  ">\n' +
+                '<div class="form-group d-none ">\n' +
                 '     <label for="token">Token CSRF</label>\n' +
-                '     <input type="" class="form-control" name="token" id="token" value="' + result + '" readonly >\n ' +
+                '     <input type="hidden" class="form-control" name="token" id="token" value="' + result + '" readonly >\n ' +
                 '</div>';
             $('#modalBody').html("Êtes-vous certain de vouloir supprimer cette disponibilité ?<br>" + $input);
             $('#modalAction').html("Supprimer");
