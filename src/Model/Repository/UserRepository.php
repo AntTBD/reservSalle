@@ -15,19 +15,6 @@ class UserRepository
         $this->base = $base;
     }
 
-
-
-    public function add(User $user)
-    {
-        $response = $this->base->prepare('INSERT INTO user (email, mdp) VALUES(:email, :mdp)');
-        $response->bindValue(':name', $user->getEmail());
-        $response->bindValue(':mdp', $user->getMdp());
-
-        $response->execute();
-
-        $user->hydrate(['id' => $this->base->lastInsertId()]);
-    }
-
     public function save($email,$mdp,$admin)
     {
         $response = $this->base->prepare('INSERT INTO user (email, mdp, admin) VALUES(:email, :mdp, :admin)');
@@ -35,7 +22,7 @@ class UserRepository
         $response->bindValue(':mdp', $mdp);
         $response->bindValue(':admin', $admin);
 
-        $response->execute();
+        return $response->execute();
     }
 
     public function exists(User $user) {
@@ -60,9 +47,7 @@ class UserRepository
         if ($result = $this->findByEmail($email)) {
 
             if (password_verify($mdp, $result['mdp'])) { //string password  , string $hash
-            //if ($mdp==$result['mdp']) {
                 if($user = $this->find($result['id'])) {
-                    //$user = $this->find($result['id']);
                     $_SESSION['id'] = $user->getId();
                     $_SESSION['email'] = $user->getEmail();
                     $_SESSION['admin'] = $user->getAdmin();
@@ -94,7 +79,12 @@ class UserRepository
     {
         $response = $this->base->prepare('DELETE FROM user WHERE id = :id;');
         $response->bindValue(':id', $id);
-        return $response->execute();
+        $response->execute();
+        if($response->rowcount()==null) {
+            return false;
+        }else{
+            return true;
+        }
 
     }
 

@@ -6,8 +6,6 @@ function closeModal(){
     $('#modalAction').html("__Action__");
 }
 
-//-----------------------------------------------------------------------------------------------
-
 function openModal($titre){
     $( "#modalAction" ).off( "click");// remove click event pour etre sur
     $('#modalTitle').html("__Titre__");
@@ -17,6 +15,17 @@ function openModal($titre){
     $('#modalTitle').html($titre);
     $('#modal').modal('show');
 }
+
+var timeoutHandle = setTimeout(function () {}, 1);
+function affichageAjaxResult(result){
+    $('#resultAjax').html(result);
+    clearTimeout(timeoutHandle);
+    timeoutHandle = setTimeout(function () {
+        $('#resultAjax').html("");
+    }, 8000);
+}
+
+//-----------------------------------------------------------------------------------------------
 
 function afficherUser() {
     $.ajax({
@@ -66,7 +75,7 @@ function supprimer(idUser) {
         cache		: 	false,
         data        :   "id="+idUser +"&token="+$("#token").val(),
         success 	: 	function(result) {
-            $("#resultAjax").html(result);
+            affichageAjaxResult(result);
             afficherUser();
         },
         error : function(){
@@ -99,7 +108,7 @@ function modifUser(idUser) {
                         data        :   "id="+idUser+"&email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+$addmdp +"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherUser();
                         },
                         error : function(){
@@ -135,7 +144,7 @@ function ajouterUser() {
                         data        :   "email="+$("#email").val()+"&admin="+($("#admin").is(":checked")? "1":"0")+"&mdp="+$("#mdp").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherUser();
                         },
                         error : function(){
@@ -202,7 +211,7 @@ function supprimerDispo(idSalle,idCreneau) {
         cache		: 	false,
         data        :   "idSalle="+idSalle+"&idCreneau="+idCreneau+"&token="+$("#token").val(),
         success 	: 	function(result) {
-            $("#resultAjax").html(result);
+            affichageAjaxResult(result);
             afficherDispo();
         },
         error : function(){
@@ -229,7 +238,7 @@ function ajouterDispo() {
                         data        :   "jour="+$("#jour").val()+"&idSalle="+$("#idSalle").val()+"&idCreneau="+$("#idCreneau").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherDispo();
                         },
                         error : function(){
@@ -279,7 +288,7 @@ function ajouterSalle() {
                         data        :   "numSalle="+$("#numSalle").val()+"&nbPlace="+$("#nbPlace").val()+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherSalles();
                         },
                         error : function(){
@@ -333,7 +342,7 @@ function supprimerSalle(id) {
         cache        :     false,
         data        :   "id="+id+"&token="+$("#token").val(),
         success     :     function(result) {
-            $("#resultAjax").html(result);
+            affichageAjaxResult(result);
             afficherSalles();
         },
         error : function(){
@@ -360,7 +369,7 @@ function modifSalle(idSalle) {
                         data        :   "id="+idSalle+"&dispo="+($("#dispo").is(":checked")? "1":"0")+"&nbPlace="+$("#nbPlace").val()+"&numSalle="+$("#numSalle").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherSalles();
                         },
                         error : function(){
@@ -413,7 +422,7 @@ function modifCreneau(idCreneau) {
                         data        :   "id="+idCreneau+"&heureDebut="+$("#heureDebut").val()+"&token="+$("#token").val(),
                         success 	: 	function(result) {
                             closeModal();
-                            $("#resultAjax").html(result);
+                            affichageAjaxResult(result);
                             afficherCreneau();
                         },
                         error : function(){

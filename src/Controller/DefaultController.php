@@ -112,21 +112,35 @@ class  DefaultController
                 $idCreneau = $_POST["idCreneau"];
                 $jour = $_POST["date"];
 
-                echo "<h1> valeurs :::::: " . $idCreneau . "  " . $idSalle . " " . $idUser . "  </h1>";
+               // echo "<h1> valeurs :::::: " . $idCreneau . "  " . $idSalle . " " . $idUser . "  </h1>";
 
                 $reservationRepository = new ReservationRepository($base);
                 $salleRepository = new SalleRepository($base);
                 $dispoRepository = new DispoRepository($base);
 
-                $verif = $reservationRepository->add($idSalle, $idUser, $idCreneau, $jour); // On créer une reservation
-                if ($verif == true) {
-                    $salle = $salleRepository->find(intval($idSalle));
-                    $salles = $reservationRepository->countResaBySalle($idSalle, $idCreneau);
-                    echo "<h1> count : " . $salles . " et nbPlaces : " . $salle->getNbPlaces() . "</h1>";
-                    if ($salles > $salle->getNbPlaces()) {   //La salle est pleine a ce creneau
-                        $dispoRepository->deleteByArguments(intval($idSalle), intval($idCreneau));
-                    }
+                $verifAddResa = $reservationRepository->add($idSalle, $idUser, $idCreneau, $jour); // On créer une reservation
+                if ($verifAddResa == true) {
+                    //envoi d'un message
+                    DefaultController::alertMessage("success", "La réservation a bien été ajoutée.");
+                } else {
+                    //envoi d'un message
+                    DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une réservation' !");
                 }
+                /*if ($verifAddResa == true) {
+                    $salle = $salleRepository->find(intval($idSalle));
+                    $nbResas = $reservationRepository->countResaBySalleCreneauJour($idSalle, $idCreneau, $jour);
+                    //echo "<h1> count : " . $nbResas ." et nbPlaces : " . $salle->getNbPlaces() . "</h1>";
+                    if ($nbResas >= $salle->getNbPlaces()) {   //La salle est pleine a ce creneau ET ce jour
+                        $verifDeleteDispo=$dispoRepository->deleteByArguments2(intval($idSalle), intval($idCreneau), $jour);
+                        if ($verifDeleteDispo == true) {
+                            //envoi d'un message
+                            DefaultController::alertMessage("warning", "Il n'y a plus de place à ce créneau.");
+                        } else {
+                            //envoi d'un message
+                            DefaultController::alertMessage("danger", "Une erreur s'est produite lors de la suppression d'une disponibilité !");
+                        }
+                    }
+                }*/
             }
         } else {
             //envoi d'un message
@@ -154,7 +168,7 @@ class  DefaultController
             //Les resas
             $reservationRepository = new ReservationRepository($base);
             $resas = $reservationRepository;
-            require __DIR__ . '/../../includes/modals/tableResa.php';
+            require __DIR__ . '/../View/Reservations/tableResa.php';
         } else {
             //envoi d'un message
             DefaultController::alertMessage("danger", "Veuillez vous connecter !");
@@ -198,7 +212,7 @@ class  DefaultController
                 require __DIR__ . '/../View/MesReservations/tableMesResa.php';
             } else {
                 //envoi d'un message
-                self::alertMessage("warning", "Vous n'avez pas de reservations !");
+                DefaultController::alertMessage("warning", "Vous n'avez pas de reservations !");
             }
         } else {
             //envoi d'un message
@@ -218,28 +232,35 @@ class  DefaultController
                 $resa = $reservationRepository->find($idReservation);
                 if ($resa != false) {
                     $verifDeleteResa = $reservationRepository->delete($idReservation); // On créer une reservation
+
                     if ($verifDeleteResa == true) {
-                        $dispoRepository = new DispoRepository($base);
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "La réservation a bien été annulée.");
+
+                        /*$dispoRepository = new DispoRepository($base);
                         $dispo_temp = new Dispo([
                             "id" => $resa->getJour(),
                             "idSalle" => $resa->getIdSalle(),
                             "idCreneau" => $resa->getIdCreneau()
                         ]);
                         $verifFindDispo = $dispoRepository->findByAll($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
-                        if ($verifFindDispo == false) {//si il n'y a pas de dispo on en crée une puisque qu'on vient de liberer une place
+                        if ($verifFindDispo == false) { //si il n'y a pas de dispo on en crée une puisque qu'on vient de liberer une place
                             $verifAddDispo = $dispoRepository->add($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
                             if ($verifAddDispo == true) {
                                 //envoi d'un message
-                                DefaultController::alertMessage("success", "La réservation a bien été supprimée.");
+                                DefaultController::alertMessage("warning", "Une nouvelle dispo a bien été ajoutée.");
                             } else {
                                 //envoi d'un message
-                                DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une dispo' !");
+                                DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une dispo !");
                             }
-                        }
+                        }*/
                     } else {
                         //envoi d'un message
                         DefaultController::alertMessage("danger", "Une erreur s'est produite lors de la suppression d'une reservation !");
                     }
+                } else {
+                    //envoi d'un message
+                    DefaultController::alertMessage("danger", "Réservation non trouvée !");
                 }
             }
         } else {
@@ -250,13 +271,13 @@ class  DefaultController
 
     public static function deconnexion()
     {
+        session_unset();
         session_destroy();
-        $_SESSION = null;
 
         //envoi d'un message
-        self::alertMessage("success", "Vous avez bien été déconnecté !");
+        DefaultController::alertMessage("success", "Vous avez bien été déconnecté !");
         //envoi de la redirection auto
-        self::redirectionAuto("/", "ACCUEIL", 5);
+        DefaultController::redirectionAuto("/", "ACCUEIL", 5);
     }
 
 
@@ -286,7 +307,7 @@ class  DefaultController
         require __DIR__ . '/../View/generatePassword.php';
         if (isset($_POST["mdp"])) {
             //envoi d'un message
-            self::alertMessage("success", "Password hashed:<br><small>" . password_hash($_POST["mdp"], PASSWORD_ARGON2I) . "</small>");
+            DefaultController::alertMessage("success", "Password hashed:<br><small>" . password_hash($_POST["mdp"], PASSWORD_ARGON2I) . "</small>");
         }
     }
 

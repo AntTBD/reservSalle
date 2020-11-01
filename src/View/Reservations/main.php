@@ -3,7 +3,7 @@
 <?php //var_dump($creneaux); ?>
 <?php //var_dump($dispos); ?>
 
-<br>
+
 <div class="container">
     <div class="row">
         <div class="col-sm">
@@ -31,3 +31,5 @@
 <div id="table" >
 </div>
 
+<div id="resultAjax" >
+</div>

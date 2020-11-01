@@ -12,13 +12,13 @@
                   <th scope="row"><button type="button" class="btn btn-light" onclick="afficherUser()">Gérer les utilisateurs</button></th>
               </tr>
               <tr>
-                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherDispo()">Gérer les disponibilité des salles</button></th>
+                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherDispo()">Gérer les disponibilités des salles</button></th>
               </tr>
               <tr>
-                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherSalles()">Ajouter/Supprimer salles</button></th>
+                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherSalles()">Gérer les salles</button></th>
               </tr>
               <tr>
-                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherCreneau()">Ajouter/Supprimer crénaux</button></th>
+                  <th scope="row"><button type="button" class="btn btn-light" onclick="afficherCreneau()">Modifier les crénaux</button></th>
               </tr>
               </tbody>
           </table>

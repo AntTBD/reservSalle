@@ -13,7 +13,7 @@
     <?php foreach ($mesResa as $resa) { ?>
 
         <tr <?php if($resa->getJour() == date('Y-m-d', strtotime("Today"))) echo "class='table-info'"; ?>>
-            <td><?= $resa->getJour() ?></td>
+            <td><?= date('Y/m/d', strtotime($resa->getJour())) ?></td>
             <td><?= $creneauRepository->find($resa->getIdCreneau())->getHeureDebut() ?></td>
             <th scope="row"><?= $salleRepository->findById($resa->getIdSalle())->getNumSalle() ?></th>
             <td>

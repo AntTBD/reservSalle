@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         <?php foreach ($dispos as $dispo){ ?>
-        <tr <?php if($dispo->getDate() == date('Y-m-d', strtotime("Today"))) echo "class='table-active'"; ?>>
+        <tr <?php if($dispo->getDate() == date('Y-m-d', strtotime("Today"))) echo "class='table-info'"; ?>>
             <td>
                 <?php
                     echo $dispo->getDate();

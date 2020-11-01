@@ -12,9 +12,11 @@
             <label for="idSalle">Salle</label>
             <select class="custom-select mr-sm-2" id="idSalle" required>
                 <option value="">Choisir une salle</option>
-                <?php foreach ($salles as $salle){ ?>
+                <?php foreach ($salles as $salle){
+                    if($salle->getDispo()=="1"){ ?>
                     <option value="<?= $salle->getId() ?>"><?= $salle->getNumSalle() ?></option>
-                <?php } ?>
+                <?php }
+                } ?>
             </select>
 
         </div>

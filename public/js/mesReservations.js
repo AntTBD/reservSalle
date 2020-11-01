@@ -1,3 +1,13 @@
+var timeoutHandle = setTimeout(function () {}, 1);
+
+function affichageAjaxResult(result){
+    $('#resultAjax').html(result);
+    clearTimeout(timeoutHandle);
+    timeoutHandle = setTimeout(function () {
+        $('#resultAjax').html("");
+    }, 8000);
+}
+
 function annulerUnReservation(idReservation) {
     $.ajax({
         url         :   '/index.php/annulerReservation',
@@ -5,12 +15,13 @@ function annulerUnReservation(idReservation) {
         cache		: 	false,
         data        :   "idReservation="+idReservation,
         success 	: 	function(result) {
-            $('#success').html(result);
+            affichageAjaxResult(result);
+
             afficherMesResa();
         },
         error : function(){
             alert("error");
-            window.location.href = '/index.php/mesreservations';
+            //window.location.href = '/index.php/mesreservations';
         }
     });
 
@@ -22,7 +33,7 @@ function afficherMesResa() {
         url         :   '/index.php/afficherMesReservations',
         type        :   'POST',
         cache		: 	false,
-        data        :   "",
+        data        :   false,
         success 	: 	function(result) {
             $('#tableMesReservations').html(result);
         },

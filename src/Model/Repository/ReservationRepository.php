@@ -21,18 +21,11 @@ class ReservationRepository
         $response->bindValue(':idSalle', $idSalle);
         $response->bindValue(':idUser', $idUser);
         $response->bindValue(':idCreneau', $idCreneau);
-        var_dump($jour);
         $resaDate = explode('/', $jour);
-        var_dump($resaDate);
         $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
         $response->bindValue(':jour', $resaDateString);
 
-        $response->execute();
-        if($response == true){
-            return true;
-        }else{
-            return false;
-        }
+        return $response->execute();
 
     }
 
@@ -43,7 +36,7 @@ class ReservationRepository
         return $resultats[0];
     }
 
-    public function countResaBySalle($idSalle, $idCreneau){
+    /*public function countResaBySalle($idSalle, $idCreneau){
         //$reponse = $this->base->prepare('SELECT COUNT(id)  FROM reservation WHERE idSalle = :idSalle;  ');
         $reponse = $this->base->prepare('SELECT * FROM reservation;');
         $resultats = $reponse->execute();
@@ -58,6 +51,18 @@ class ReservationRepository
 
         return $i;
     }
+
+    public function countResaBySalleCreneauJour($idSalle, $idCreneau, $jour){
+        //$reponse = $this->base->prepare('SELECT COUNT(id)  FROM reservation WHERE idSalle = :idSalle;  ');
+        $reponse = $this->base->prepare('SELECT COUNT(*)  FROM reservation WHERE idSalle = :idSalle && idCreneau = :idCreneau && jour = :jour;');
+        $reponse->bindValue(':idSalle',$idSalle);
+        $reponse->bindValue(':idCreneau',$idCreneau);
+        $resaDate = explode('/', $jour);
+        $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
+        $reponse->bindValue(':jour',$resaDateString);
+        $resultats = $reponse->execute();
+        return $resultats;
+    }*/
 
     public function findAll()
     {
@@ -74,12 +79,14 @@ class ReservationRepository
         $resas = self::findAll();
         $dejaReserv = false;
         $compteur = 0;
-        foreach ($resas as $resa){
-            //Module de lecture de Dates
-            $resaDate = explode('-', $resa->getJour());
-            $resaDateString = $resaDate[0]."/".$resaDate[1]."/".$resaDate[2];
 
-            if($resaDateString == $date && $resa->getIdCreneau() == $idCreneau && $resa->getIdSalle() == $idSalle ){
+        //Module de lecture de Dates
+        $resaDate = explode('/', $date);
+        $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
+
+        foreach ($resas as $resa){
+
+            if($resa->getJour() == $resaDateString && $resa->getIdCreneau() == $idCreneau && $resa->getIdSalle() == $idSalle ){
                 if($resa->getIdUser() == $idUser){
                     $dejaReserv = true;
                 }
@@ -89,10 +96,11 @@ class ReservationRepository
 
         }
 
-        if( $dejaReserv == true){
+        if( $dejaReserv == true && $compteur >= $nbPlaces){
+            return 3;
+        }elseif( $dejaReserv == true){
             return 2;
-        }elseif ($compteur < $nbPlaces)
-        {
+        }elseif ($compteur < $nbPlaces) {
             return 1;
         }else{
             return 0;

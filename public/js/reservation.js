@@ -1,6 +1,12 @@
-$( document ).ready(function() {
 
-});
+var timeoutHandle = setTimeout(function () {}, 1);
+function affichageAjaxResult(result){
+    $('#resultAjax').html(result);
+    clearTimeout(timeoutHandle);
+    timeoutHandle = setTimeout(function () {
+        $('#resultAjax').html("");
+    }, 8000);
+}
 
 function afficherResa() {
     $.ajax({
@@ -17,15 +23,15 @@ function afficherResa() {
     });
 }
 
-function reservation(idSalle,idCreneau,idUser,date) {
+function reservation(idSalle,idCreneau,idUser) {
     $.ajax({
         url         :   '/index.php/reservationBDD',
         type        :   'POST',
         cache		: 	false,
         data        :   "idUser="+idUser+"&idCreneau="+idCreneau+"&idSalle="+idSalle+"&date="+$("#date").val(),
         success 	: 	function(result) {
-            toastr.success("youpi!!!!!!!!!!");
             afficherResa();
+            affichageAjaxResult(result);
         },
         error : function(){
             alert("error");

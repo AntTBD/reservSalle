@@ -34,16 +34,7 @@ class SalleRepository
         return $salle;
     }
 
-    public function add(Salle $salle)
-    {
-        /*$response = $this->base->prepare('INSERT INTO user (email, mdp) VALUES(:email, :mdp)');
-        $response->bindValue(':name', $user->getEmail());
-        $response->bindValue(':mdp', $user->getMdp());
 
-        $response->execute();
-
-        $user->hydrate(['id' => $this->base->lastInsertId()]);*/
-    }
 
     public function findAll()
     {
@@ -77,7 +68,7 @@ class SalleRepository
         $response->bindValue(':placeSalle', $placeSalle);
         $response->bindValue(':dispo', $dispo);
 
-        $response->execute();
+        return $response->execute();
     }
 
     public function modifyById($id,$dispo,$numSalle,$nbPlaces){

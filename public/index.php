@@ -107,5 +107,4 @@ if ('/index.php' == $uri || '/' == $uri) {
 //ob_end_flush();
 
 //var_dump($_SESSION);
-//phpinfo();
 

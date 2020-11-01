@@ -26,7 +26,7 @@ class AdminController
                 return false;
             }
         } else {
-            DefaultController::alertMessage("danger", "Vous n'êtes pas conecté !");
+            DefaultController::alertMessage("danger", "Vous n'êtes pas connecté !");
             return false;
         }
     }
@@ -80,12 +80,13 @@ class AdminController
                 if (isset($_POST["id"])) {
                     $base = Repository::connect();
                     $userRepository = new UserRepository($base);
-                    $user = $userRepository->delete($_POST["id"]);
-
-                    if ($user) {
-                        return true;
-                    } else {
-                        return false;
+                    $userDeleted = $userRepository->delete($_POST["id"]);
+                    if($userDeleted){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Le user a bien été supprimé.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
                     }
                 }
             } else {
@@ -118,11 +119,17 @@ class AdminController
                     $base = Repository::connect();
                     $userRepository = new UserRepository($base);
                     if (isset($_POST['mdp'])) {
-                        $userRepository->modifyByIdWithMdp($_POST["id"], $_POST["email"], $_POST["admin"], password_hash($_POST["mdp"], PASSWORD_ARGON2I));
+                        $userModified=$userRepository->modifyByIdWithMdp($_POST["id"], $_POST["email"], $_POST["admin"], password_hash($_POST["mdp"], PASSWORD_ARGON2I));
                     } else {
-                        $userRepository->modifyById($_POST["id"], $_POST["email"], $_POST["admin"]);
+                        $userModified=$userRepository->modifyById($_POST["id"], $_POST["email"], $_POST["admin"]);
                     }
-                    return $userRepository;
+                    if($userModified){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Le user a bien été modifié.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                    }
                 }
             } else {
                 //envoi d'un message
@@ -146,8 +153,14 @@ class AdminController
                 if (isset($_POST["email"]) && isset($_POST["mdp"]) && isset($_POST["admin"])) {
                     $base = Repository::connect();
                     $userRepository = new UserRepository($base);
-                    $userRepository->save($_POST["email"], password_hash($_POST["mdp"], PASSWORD_ARGON2I), $_POST["admin"]);
-                    return $userRepository;
+                    $userAdded=$userRepository->save($_POST["email"], password_hash($_POST["mdp"], PASSWORD_ARGON2I), $_POST["admin"]);
+                    if($userAdded){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Le user a bien été ajouté.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                    }
                 }
             } else {
                 //envoi d'un message
@@ -198,12 +211,13 @@ class AdminController
                 if (isset($_POST["idSalle"]) && isset($_POST["idCreneau"])) {
                     $base = Repository::connect();
                     $dispoRepository = new DispoRepository($base);
-                    $user = $dispoRepository->deleteByArguments($_POST["idSalle"], $_POST["idCreneau"]);
-
-                    if ($user) {
-                        return true;
-                    } else {
-                        return false;
+                    $dispoDeleted = $dispoRepository->deleteByArguments($_POST["idSalle"], $_POST["idCreneau"]);
+                    if($dispoDeleted){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "La dispo a bien été supprimée.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
                     }
                 }
             } else {
@@ -241,8 +255,19 @@ class AdminController
                     $dispoRepository = new DispoRepository($base);
                     $dispoDate = explode('/', $_POST["jour"]);
                     $dispoDateString = $dispoDate[0] . "-" . $dispoDate[1] . "-" . $dispoDate[2];
-                    $dispoRepository->add($dispoDateString, $_POST["idSalle"], $_POST["idCreneau"]);
-                    return $dispoRepository;
+                    if(sizeof($dispoRepository->findByAll($dispoDateString, $_POST["idSalle"], $_POST["idCreneau"]))==0){
+                        $dispoAdded=$dispoRepository->add($dispoDateString, $_POST["idSalle"], $_POST["idCreneau"]);
+                        if($dispoAdded){
+                            //envoi d'un message
+                            DefaultController::alertMessage("success", "La dispo a bien été ajoutée.");
+                        }else{
+                            //envoi d'un message
+                            DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                        }
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Cette dispo existe déjà.");
+                    }
                 }
             } else {
                 //envoi d'un message
@@ -279,8 +304,14 @@ class AdminController
                 if (isset($_POST["numSalle"]) && isset($_POST["nbPlace"]) && isset($_POST["dispo"])) {
                     $base = Repository::connect();
                     $salleRepository = new SalleRepository($base);
-                    $salleRepository->save($_POST["numSalle"], $_POST["nbPlace"], $_POST["dispo"]);
-                    return 0;
+                    $salleAdded = $salleRepository->save($_POST["numSalle"], $_POST["nbPlace"], $_POST["dispo"]);
+                    if($salleAdded){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "La salle a bien été ajoutée.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                    }
                 }
             } else {
                 //envoi d'un message
@@ -304,12 +335,13 @@ class AdminController
                 if (isset($_POST["id"])) {
                     $base = Repository::connect();
                     $salleRepository = new SalleRepository($base);
-                    $salle = $salleRepository->delete($_POST["id"]);
-
-                    if ($salle) {
-                        return true;
-                    } else {
-                        return false;
+                    $salleDeleted = $salleRepository->delete($_POST["id"]);
+                    if($salleDeleted){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "La salle a bien été supprimée.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
                     }
                 }
             } else {
@@ -340,8 +372,14 @@ class AdminController
                 if (isset($_POST["id"]) && isset($_POST["dispo"]) && isset($_POST["numSalle"]) && isset($_POST["nbPlace"])) {
                     $base = Repository::connect();
                     $salleRepository = new SalleRepository($base);
-                    $salleRepository->modifyById($_POST["id"], $_POST["dispo"], $_POST["numSalle"], $_POST["nbPlace"]);
-                    return $salleRepository;
+                    $salleModified = $salleRepository->modifyById($_POST["id"], $_POST["dispo"], $_POST["numSalle"], $_POST["nbPlace"]);
+                    if($salleModified){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "La salle a bien été modifiée.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                    }
                 }
             } else {
                 //envoi d'un message
@@ -382,8 +420,15 @@ class AdminController
                 if (isset($_POST["id"]) && isset($_POST["heureDebut"])) {
                     $base = Repository::connect();
                     $creneauRepository = new CreneauRepository($base);
-                    $creneauRepository->modifyById($_POST["id"], $_POST["heureDebut"]);
-                    return $creneauRepository;
+                    $creneauModified=$creneauRepository->modifyById($_POST["id"], $_POST["heureDebut"]);
+
+                    if($creneauModified){
+                        //envoi d'un message
+                        DefaultController::alertMessage("success", "Le créneau a bien été modifié.");
+                    }else{
+                        //envoi d'un message
+                        DefaultController::alertMessage("danger", "Une erreur s'est produite.");
+                    }
                 }
             } else {
                 //envoi d'un message
