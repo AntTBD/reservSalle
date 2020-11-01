@@ -2,9 +2,9 @@
 var timeoutHandle = setTimeout(function () {}, 1);
 function affichageAjaxResult(result){
     $('#resultAjax').html(result);
-    clearTimeout(timeoutHandle);
+    clearTimeout(timeoutHandle);// si une popup été déjà affiché, on réinitialise le timeout
     timeoutHandle = setTimeout(function () {
-        $('#resultAjax').html("");
+        $('#resultAjax').html("");// au bout de 8s on enlève la popup
     }, 8000);
 }
 

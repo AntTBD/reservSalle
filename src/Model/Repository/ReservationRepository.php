@@ -36,34 +36,6 @@ class ReservationRepository
         return $resultats[0];
     }
 
-    /*public function countResaBySalle($idSalle, $idCreneau){
-        //$reponse = $this->base->prepare('SELECT COUNT(id)  FROM reservation WHERE idSalle = :idSalle;  ');
-        $reponse = $this->base->prepare('SELECT * FROM reservation;');
-        $resultats = $reponse->execute();
-        $reponse->bindValue(':idSalle',$idSalle);
-        $listResa =$reponse->fetchAll(\PDO::FETCH_CLASS, 'App\Model\Reservation');
-        $i =0;
-        foreach ($listResa as $resa){
-            if($resa->getIdSalle() == $idSalle && $resa->getIdCreneau() == $idCreneau){
-                $i++;
-            }
-        }
-
-        return $i;
-    }
-
-    public function countResaBySalleCreneauJour($idSalle, $idCreneau, $jour){
-        //$reponse = $this->base->prepare('SELECT COUNT(id)  FROM reservation WHERE idSalle = :idSalle;  ');
-        $reponse = $this->base->prepare('SELECT COUNT(*)  FROM reservation WHERE idSalle = :idSalle && idCreneau = :idCreneau && jour = :jour;');
-        $reponse->bindValue(':idSalle',$idSalle);
-        $reponse->bindValue(':idCreneau',$idCreneau);
-        $resaDate = explode('/', $jour);
-        $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
-        $reponse->bindValue(':jour',$resaDateString);
-        $resultats = $reponse->execute();
-        return $resultats;
-    }*/
-
     public function findAll()
     {
         $reponse = $this->base->prepare('SELECT * FROM reservation;');

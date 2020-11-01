@@ -3,7 +3,6 @@
 
 namespace App\Controller;
 
-use App\Model\Dispo;
 use App\Model\Repository\CreneauRepository;
 use App\Model\ClavierCrypte;
 use App\Model\Repository\Repository;
@@ -112,8 +111,6 @@ class  DefaultController
                 $idCreneau = $_POST["idCreneau"];
                 $jour = $_POST["date"];
 
-               // echo "<h1> valeurs :::::: " . $idCreneau . "  " . $idSalle . " " . $idUser . "  </h1>";
-
                 $reservationRepository = new ReservationRepository($base);
                 $salleRepository = new SalleRepository($base);
                 $dispoRepository = new DispoRepository($base);
@@ -126,21 +123,6 @@ class  DefaultController
                     //envoi d'un message
                     DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une réservation' !");
                 }
-                /*if ($verifAddResa == true) {
-                    $salle = $salleRepository->find(intval($idSalle));
-                    $nbResas = $reservationRepository->countResaBySalleCreneauJour($idSalle, $idCreneau, $jour);
-                    //echo "<h1> count : " . $nbResas ." et nbPlaces : " . $salle->getNbPlaces() . "</h1>";
-                    if ($nbResas >= $salle->getNbPlaces()) {   //La salle est pleine a ce creneau ET ce jour
-                        $verifDeleteDispo=$dispoRepository->deleteByArguments2(intval($idSalle), intval($idCreneau), $jour);
-                        if ($verifDeleteDispo == true) {
-                            //envoi d'un message
-                            DefaultController::alertMessage("warning", "Il n'y a plus de place à ce créneau.");
-                        } else {
-                            //envoi d'un message
-                            DefaultController::alertMessage("danger", "Une erreur s'est produite lors de la suppression d'une disponibilité !");
-                        }
-                    }
-                }*/
             }
         } else {
             //envoi d'un message
@@ -236,24 +218,6 @@ class  DefaultController
                     if ($verifDeleteResa == true) {
                         //envoi d'un message
                         DefaultController::alertMessage("success", "La réservation a bien été annulée.");
-
-                        /*$dispoRepository = new DispoRepository($base);
-                        $dispo_temp = new Dispo([
-                            "id" => $resa->getJour(),
-                            "idSalle" => $resa->getIdSalle(),
-                            "idCreneau" => $resa->getIdCreneau()
-                        ]);
-                        $verifFindDispo = $dispoRepository->findByAll($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
-                        if ($verifFindDispo == false) { //si il n'y a pas de dispo on en crée une puisque qu'on vient de liberer une place
-                            $verifAddDispo = $dispoRepository->add($dispo_temp->getDate(), $dispo_temp->getIdSalle(), $dispo_temp->getIdCreneau());
-                            if ($verifAddDispo == true) {
-                                //envoi d'un message
-                                DefaultController::alertMessage("warning", "Une nouvelle dispo a bien été ajoutée.");
-                            } else {
-                                //envoi d'un message
-                                DefaultController::alertMessage("danger", "Une erreur s'est produite lors de l'ajout d'une dispo !");
-                            }
-                        }*/
                     } else {
                         //envoi d'un message
                         DefaultController::alertMessage("danger", "Une erreur s'est produite lors de la suppression d'une reservation !");
@@ -324,12 +288,14 @@ class  DefaultController
         if (isset($_SESSION[$nom . '_token']) && isset($_SESSION[$nom . '_token_time']) && isset($_POST['token'])) {
             if ($_SESSION[$nom . '_token'] == $_POST['token']) {
                 if ($_SESSION[$nom . '_token_time'] >= (time() - $temps)) {
+                    //on detruit les tokens après s'en etre servi
                     unset($_SESSION[$nom . '_token']);
                     unset($_SESSION[$nom . '_token_time']);
                     return true;
                 }
             }
         }
+        //on detruit les tokens après s'en etre servi
         unset($_SESSION[$nom . '_token']);
         unset($_SESSION[$nom . '_token_time']);
         return false;

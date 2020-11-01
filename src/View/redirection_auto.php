@@ -5,7 +5,7 @@
 // penser à declarer $nomPage
 // penser à declarer $dureeEnSecondeAvantRedirection
 ?>
-<!-- https://openclassrooms.com/forum/sujet/rediriger-apres-x-secondes-et-afficher-le-nombre-de-secon-35039#message-6572592 -->
+
 <center>
     <p>Redirection dans <span id="compt"></span> seconde<span id="s"></span>.
     <p><a href="<?= $lien ?>"><button class="btn btn-success" type="button"><?= $nomPage ?></button></a></p>

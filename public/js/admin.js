@@ -19,9 +19,9 @@ function openModal($titre){
 var timeoutHandle = setTimeout(function () {}, 1);
 function affichageAjaxResult(result){
     $('#resultAjax').html(result);
-    clearTimeout(timeoutHandle);
+    clearTimeout(timeoutHandle);// si une popup été déjà affiché, on réinitialise le timeout
     timeoutHandle = setTimeout(function () {
-        $('#resultAjax').html("");
+        $('#resultAjax').html("");// au bout de 8s on enlève la popup
     }, 8000);
 }
 
@@ -43,13 +43,13 @@ function afficherUser() {
 }
 
 function deleteVerif(idUser) {
-    openModal("Alert");
     $.ajax({
         url: '/index.php/deleteUserVerif',
         type: 'POST',
         cache: false,
         data: false,
         success: function (result) {
+            openModal("Alert");
             let $input = '' +
                 '<div class="form-group d-none ">\n' +
                 '     <label for="token">Token CSRF</label>\n' +
@@ -85,13 +85,13 @@ function supprimer(idUser) {
 }
 
 function modifUser(idUser) {
-    openModal("Modifier un Utilisateur");
     $.ajax({                                            //On affiche la modal de modification
         url         :   '/index.php/modifierUser',
         type        :   'POST',
         cache		: 	false,
         data        :   "id="+idUser,
         success 	: 	function(result) {
+            openModal("Modifier un Utilisateur");
             $('#modalBody').html(result);
             $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {
@@ -127,12 +127,12 @@ function modifUser(idUser) {
 }
 
 function ajouterUser() {
-    openModal("Ajouter un Utilisateur");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterUser',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
+            openModal("Ajouter un Utilisateur");
             $('#modalBody').html(result);
             $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
@@ -177,13 +177,13 @@ function afficherDispo() {
 }
 
 function deleteDispoVerif(idSalle,idCreneau) {
-    openModal("Alerte");
     $.ajax({
         url: '/index.php/deleteDispoVerif',
         type: 'POST',
         cache: false,
         data: false,
         success: function (result) {
+            openModal("Alerte");
             let $input = '' +
                 '<div class="form-group d-none ">\n' +
                 '     <label for="token">Token CSRF</label>\n' +
@@ -221,12 +221,12 @@ function supprimerDispo(idSalle,idCreneau) {
 }
 
 function ajouterDispo() {
-    openModal("Ajouter une disponibilité");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterDispo',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
+            openModal("Ajouter une disponibilité");
             $('#modalBody').html(result);
             $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
@@ -271,12 +271,12 @@ function afficherSalles() {
 }
 
 function ajouterSalle() {
-    openModal("Ajouter une salle");
     $.ajax({                                            //On affiche la modal d'ajout
         url         :   '/index.php/ajouterSalle',
         type        :   'POST',
         cache		: 	false,
         success 	: 	function(result) {
+            openModal("Ajouter une salle");
             $('#modalBody').html(result);
             $('#modalAction').html("Ajouter");
             $('#modalAction').click(function (id) {
@@ -309,13 +309,13 @@ function ajouterSalle() {
 
 
 function deleteSalleVerif(idSalle) {
-    openModal("Alerte");
     $.ajax({
         url         :   '/index.php/deleteSalleVerif',
         type        :   'POST',
         cache        :     false,
         data        :   false,
         success     :     function(result) {
+            openModal("Alerte");
             let $input = '' +
                 '<div class="form-group  d-none ">\n'+
                 '     <label for="token">Token CSRF</label>\n' +
@@ -351,13 +351,13 @@ function supprimerSalle(id) {
     });
 }
 function modifSalle(idSalle) {
-    openModal("Modifier une salle");
     $.ajax({                                                //On affiche la modal de modification
         url         :   '/index.php/modifierSalle',
         type        :   'POST',
         cache		: 	false,
         data        :   "id="+idSalle,
         success 	: 	function(result) {
+            openModal("Modifier une salle");
             $('#modalBody').html(result);
             $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {
@@ -404,13 +404,13 @@ function afficherCreneau() {
 
 
 function modifCreneau(idCreneau) {
-    openModal("Modifier un creneau");
     $.ajax({                                                //On affiche la modal de modification
         url         :   '/index.php/modifierCreneau',
         type        :   'POST',
         cache		: 	false,
         data        :   "id="+idCreneau,
         success 	: 	function(result) {
+            openModal("Modifier un creneau");
             $('#modalBody').html(result);
             $('#modalAction').html("Modifier");
             $('#modalAction').click(function (id) {

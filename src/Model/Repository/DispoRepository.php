@@ -2,7 +2,6 @@
 
 
 namespace App\Model\Repository;
-use App\Model\Dispo;
 
 
 class DispoRepository
@@ -77,20 +76,5 @@ class DispoRepository
             return true;
         }
     }
-
-    /*public function deleteByArguments2($idSalle, $idCreneau, $jour){
-        $reponse = $this->base->prepare('DELETE FROM dispo WHERE idSalle = :idSalle && idCreneau = :idCreneau && jour = :jour;');
-        $reponse->bindValue(':idSalle',$idSalle);
-        $reponse->bindValue(':idCreneau',$idCreneau);
-        $resaDate = explode('/', $jour);
-        $resaDateString = $resaDate[0]."-".$resaDate[1]."-".$resaDate[2];
-        $reponse->bindValue(':jour',$resaDateString);
-        $reponse->execute();
-        if($reponse->rowcount()==null) {
-            return false;
-        }else{
-            return true;
-        }
-    }*/
 
 }

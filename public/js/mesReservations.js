@@ -1,10 +1,9 @@
 var timeoutHandle = setTimeout(function () {}, 1);
-
 function affichageAjaxResult(result){
     $('#resultAjax').html(result);
-    clearTimeout(timeoutHandle);
+    clearTimeout(timeoutHandle);// si une popup été déjà affiché, on réinitialise le timeout
     timeoutHandle = setTimeout(function () {
-        $('#resultAjax').html("");
+        $('#resultAjax').html("");// au bout de 8s on enlève la popup
     }, 8000);
 }
 
@@ -21,7 +20,6 @@ function annulerUnReservation(idReservation) {
         },
         error : function(){
             alert("error");
-            //window.location.href = '/index.php/mesreservations';
         }
     });
 
@@ -43,6 +41,7 @@ function afficherMesResa() {
     });
 }
 
-$( document ).ready(function() {
+// affichage des resas une fois que tous les scripts (dont jquery) ont été chargés
+document.addEventListener("DOMContentLoaded", function(){
     afficherMesResa();
 });

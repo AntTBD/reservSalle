@@ -1,7 +1,4 @@
 <?php
-// on démarre la temporisation de sortie. Tant qu'elle est enclenchée, aucune donnée, hormis les en-têtes, n'est envoyée au navigateur, mais temporairement mise en tampon.
-// https://www.php.net/manual/fr/function.ob-start.php
-//ob_start();
 
 session_start();
 require __DIR__.'/../vendor/autoload.php';
@@ -101,10 +98,6 @@ if ('/index.php' == $uri || '/' == $uri) {
     require __DIR__ . '/../src/View/Commons/footer.php';
 }
 
-
-
-//on affiche le contenu de ce tampon
-//ob_end_flush();
 
 //var_dump($_SESSION);
 

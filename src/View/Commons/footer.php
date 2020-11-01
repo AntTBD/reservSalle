@@ -11,8 +11,6 @@
     </footer>
     <!-- fin footer -->
 
-    <?php
-    require __DIR__.'/scripts.php';
-    ?>
+    <?php require __DIR__.'/scripts.php'; ?>
 </body>
 </html>

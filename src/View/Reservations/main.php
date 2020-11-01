@@ -1,9 +1,4 @@
 
-<?php //var_dump($salles); ?>
-<?php //var_dump($creneaux); ?>
-<?php //var_dump($dispos); ?>
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
@@ -33,3 +28,5 @@
 
 <div id="resultAjax" >
 </div>
+
+<script src="/js/reservation.js" type="text/javascript"></script>

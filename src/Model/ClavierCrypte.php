@@ -35,12 +35,15 @@ class ClavierCrypte
     private static function createCodedTab () {
         $tabCorrespondance=Array();
         $nbrChar= (new ClavierCrypte)->getNbrCharByNum();
+        //generation du tableau de correspondance
         for ($i = 0; $i < 10; $i++){
             array_push ($tabCorrespondance, self::izrand($nbrChar,false));
         }
 
         return $tabCorrespondance;
     }
+
+    //fonction permettant de generer des strings totalement random
     private static function izrand($length = 32, $fullNumeric = false) {
         // https://stackoverflow.com/questions/31441050/using-chr-rand-to-generate-a-random-character-a-z (izrand v2)
         $random_string = "";
