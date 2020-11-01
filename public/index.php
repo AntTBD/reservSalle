@@ -40,10 +40,6 @@ if ('/index.php' == $uri || '/' == $uri) {
     DefaultController::afficherMesReservations();
 } elseif ('/index.php/annulerReservation' == $uri) {
     DefaultController::annulerReservation();
-} elseif ('/index.php/generatePassword' == $uri) {
-    require __DIR__ . '/../src/View/Commons/header.php';
-    DefaultController::generatePassword();
-    require __DIR__ . '/../src/View/Commons/footer.php';
 } elseif ('/index.php/admin' == $uri) {
     require __DIR__ . '/../src/View/Commons/header.php';
     AdminController::admin();

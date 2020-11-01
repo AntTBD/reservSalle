@@ -23,7 +23,7 @@ class  DefaultController
     }
 
 
-    public static function accueil() //use $testToken = true pour avoir un token visible mais vide
+    public static function accueil()
     {
 
         if (!isset($_SESSION['id'])) {
@@ -266,14 +266,6 @@ class  DefaultController
         require __DIR__ . '/../View/redirection_auto.php';
     }
 
-    public static function generatePassword()
-    {
-        require __DIR__ . '/../View/generatePassword.php';
-        if (isset($_POST["mdp"])) {
-            //envoi d'un message
-            DefaultController::alertMessage("success", "Password hashed:<br><small>" . password_hash($_POST["mdp"], PASSWORD_ARGON2I) . "</small>");
-        }
-    }
 
     public static function generer_token($nom = '')
     {
